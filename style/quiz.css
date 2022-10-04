@@ -1,0 +1,78 @@
+ 
+.form_elem {
+    color : #330066;
+    font-family : Arial, Helvetica, sans-serif;
+    font-size : 12px;
+    font-style : normal;
+    border: 1px solid #676462;
+    margin: 0px;
+}
+
+h1, h2, h3 {
+	color: #4479aa;
+}
+
+body a {
+	text-decoration: none;
+	font-weight: bold;
+  	color: #4479aa;	
+}
+
+body a:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+body a:visited {
+	font-weight: bold;
+  	color: #8daccc;
+}
+
+h1 {
+    font-family : Arial, Helvetica, sans-serif;
+    font-size : 18px;
+    font-style : bold;
+}
+
+body {
+    font-family : Arial, Helvetica, sans-serif;
+    font-size : 16px;
+    font-style : normal;
+}
+
+table {
+	border-collapse:collapse;
+}
+
+th, td {
+	border:1px solid #676462;
+	font-family : Arial, Helvetica, sans-serif;
+}
+
+th {
+	font-style : bold;
+}
+
+input.selection{
+	color:#275d8f;
+	background-color: #c9d8e5;
+}
+
+#arborescence ul, #arborescence li{
+	text-align: left;
+	list-style-type: none;
+	list-style-image: none;
+}
+
+#arborescence div.liste_fichier{
+	margin-left: 25px;
+	/*background-color: #d9e0e7;*/
+}
+
+#arborescence ul {
+	background: url("../img/line.gif") repeat-y 0px 0px;
+}
+
+#arborescence ul.last {
+	background: none;
+}
