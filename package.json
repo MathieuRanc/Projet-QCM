@@ -1,0 +1,46 @@
+{
+  "name": "electron-nuxt",
+  "version": "0.0.1",
+  "description": "An electron-nuxt project",
+  "main": "./dist/main/index.js",
+  "scripts": {
+    "dev": "node .electron-nuxt/dev.js",
+    "build": "node .electron-nuxt/build.js",
+    "build:all": "electron-builder -mwl",
+    "preinstall": "node .electron-nuxt/check-engines.js",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": [],
+  "author": "Mathieu <dev@mathieuranc.fr>",
+  "license": "MIT",
+  "homepage": "https://github.com/michalzaq12/electron-nuxt/blob/master/README.md",
+  "engines": {
+    "node": ">=14.14.9"
+  },
+  "resolutions": {
+    "@types/node": "14.14.9"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "5.15.3",
+    "@xpda-dev/core": "^0.1.6",
+    "@xpda-dev/electron-builder": "^0.2.1",
+    "@xpda-dev/electron-launcher": "^0.3.0",
+    "@xpda-dev/webpack-step": "^0.1.6",
+    "cross-env": "^7.0.3",
+    "deepmerge": "^4.2.2",
+    "electron": "^16.0.5",
+    "electron-builder": "^23.6.0",
+    "electron-devtools-installer": "^3.2.0",
+    "nuxt": "^2.15.8",
+    "sass": "^1.55.0",
+    "sass-loader": "10",
+    "webpack": "^4.46.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "electron-db": "^0.15.7",
+    "electron-packager": "^17.0.0",
+    "nedb": "^1.8.0",
+    "path": "^0.12.7"
+  }
+}
