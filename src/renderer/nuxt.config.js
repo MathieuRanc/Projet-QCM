@@ -14,5 +14,8 @@ module.exports = {
   loading: false,
   plugins: [{ ssr: true, src: '@/plugins/icons.js' }],
   buildModules: [],
-  modules: [],
+  modules: ['@nuxt/content'],
+  // router: {
+  //   middleware: ['adjustScroll'],
+  // },
 };

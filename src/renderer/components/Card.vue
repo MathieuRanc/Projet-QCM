@@ -2,7 +2,10 @@
   <NuxtLink class="card" tag="div" :to="'/qcm/' + id">
     <h4>{{ title }}</h4>
     <Stepper :step="step" />
-    <img src="~/assets/images/round_shape.svg" alt="" />
+    <svg width="400" height="14" viewBox="0 0 400 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0C0 0 0 14 200 14C400 14 400 0 400 0V14H0V0Z" fill="#DB3F3F" />
+    </svg>
+
     <div class="red__part">
       <p>{{ type }}</p>
       <p>{{ date }}</p>
@@ -24,7 +27,7 @@ export default {
     },
     step: {
       type: Number,
-      default: 2,
+      default: 0,
     },
     type: {
       type: String,
@@ -50,8 +53,13 @@ export default {
 
   display: flex;
   flex-direction: column;
-  img {
+  svg {
     width: 100%;
+    transform: translate(0, 2px);
+    object-fit: cover;
+    path {
+      fill: var(--red);
+    }
   }
   h4 {
     text-align: center;

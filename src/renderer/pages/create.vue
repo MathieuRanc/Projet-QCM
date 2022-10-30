@@ -29,7 +29,7 @@
         /></label>
         <label for="date">
           <span>Date d'examen</span>
-          <input type="date" name="date" id="date"
+          <input type="date" name="date" id="date" :value="new Date().toISOString().substring(0, 10)"
         /></label>
       </div>
       <input class="button" type="submit" value="Créer le QCM" />
@@ -38,13 +38,55 @@
 </template>
 
 <script>
+const db = require('electron-db');
+// const path = require('path');
+
+// This will save the database in the same directory as the application.
+// const location = path.join(__dirname, '');
+
+db.createTable('quiz', (succ, msg) => {
+  // succ - boolean, tells if the call is successful
+  if (succ) {
+    console.log(msg);
+  } else {
+    console.log('An error has occured. ' + msg);
+  }
+});
 export default {
   name: 'Create',
+  data() {
+    return {
+      elements: [],
+    };
+  },
   methods: {
-    submit() {
-      // TODO: create quiz
+    submit(event) {
+      const quiz = {
+        promo: event.target.promo.value,
+        subject: event.target.subject.value,
+        type: event.target.type.value,
+        date: event.target.date.value,
+        createdAt: new Date().toISOString(),
+        modifiedAt: new Date().toISOString(),
+      };
+      console.log(quiz);
+
+      db.insertTableContent('quiz', quiz, (succ, msg) => {
+        // succ - boolean, tells if the call is successful
+        console.log('Success: ' + succ);
+        console.log('Message: ' + msg);
+        // get last element of the table
+      });
       this.$router.push('/');
     },
+  },
+  mounted() {
+    const em = this;
+    db.getAll('quiz', (succ, data) => {
+      if (succ) {
+        em.elements = data;
+      }
+    });
   },
 };
 </script>

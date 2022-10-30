@@ -1,23 +1,71 @@
 <template>
   <main>
-    <NuxtLink to="/tutoriel" class="hero" tag="div">
+    <NuxtLink to="/doc/introduction" class="hero" tag="div">
       <h2>Apprendre à générer un QCM</h2>
-      <h3>Suivez notre tutoriel pour apprendre à utiliser l’application</h3>
+      <h3>Parcourez la documentation pour apprendre à utiliser l’application</h3>
     </NuxtLink>
     <div class="grid">
       <h1>Récents</h1>
       <div>
-        <Card />
-        <Card />
-        <Card />
+        <Card
+          v-for="(quiz, i) in mostRecentsQuizzes"
+          :key="i"
+          :id="quiz.id"
+          :title="quiz.promo + ' - ' + quiz.subject"
+          :type="quiz.type"
+          :date="
+            new Date(quiz.date).toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          "
+        />
       </div>
     </div>
     <div class="grid">
       <h1>
-        Toutes les épreuves <span>({{ count }})</span>
+        Epreuves à venir <span>({{ futureQuiz.length }})</span>
       </h1>
       <div>
-        <Card v-for="n in count" :key="n" :id="n + 1" />
+        <Card
+          v-for="(quiz, i) in futureQuiz"
+          :key="i"
+          :id="quiz.id"
+          :title="quiz.promo + ' - ' + quiz.subject"
+          :type="quiz.type"
+          :date="
+            new Date(quiz.date).toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          "
+        />
+      </div>
+    </div>
+    <div class="grid">
+      <h1>
+        Epreuves passées <span>({{ passedQuiz.length }})</span>
+      </h1>
+      <div>
+        <Card
+          v-for="(quiz, i) in passedQuiz"
+          :key="i"
+          :id="i + 1"
+          :title="quiz.promo + ' - ' + quiz.subject"
+          :type="quiz.type"
+          :date="
+            new Date(quiz.date).toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          "
+        />
       </div>
     </div>
   </main>
@@ -25,15 +73,52 @@
 
 <script>
 import Card from '~/components/Card.vue';
+var db = require('electron-db');
+
 export default {
+  // meta: {
+  //   scrollPos: {
+  //     x: 0,
+  //     y: 0,
+  //   },
+  // },
   name: 'IndexPage',
   components: {
     Card,
   },
-  data() {
-    return {
-      count: 8,
-    };
+  computed: {
+    quizzes() {
+      var quizzes;
+      db.getAll('quiz', (succ, data) => {
+        if (succ) {
+          // sort by date
+          quizzes = data.sort((a, b) => {
+            // less 1 day to compare date in UTC
+            return new Date(b.date) - new Date(a.date);
+          });
+        }
+      });
+      return quizzes;
+    },
+    // compare date in UTC
+    passedQuiz() {
+      return this.quizzes.filter((quiz) => {
+        return new Date(quiz.date) < new Date();
+      });
+    },
+    // futur from yesterday
+    futureQuiz() {
+      return this.quizzes.filter((quiz) => {
+        return new Date(quiz.date) >= new Date();
+      });
+    },
+    mostRecentsQuizzes() {
+      return this.quizzes
+        .sort((a, b) => {
+          return new Date(b.date) - new Date(a.date);
+        })
+        .slice(0, 3);
+    },
   },
 };
 </script>

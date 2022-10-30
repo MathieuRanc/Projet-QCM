@@ -35,6 +35,11 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+input,
+textarea {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 #App {
   display: flex;
   flex-direction: column;
