@@ -66,6 +66,7 @@ export default {
         subject: event.target.subject.value,
         type: event.target.type.value,
         date: event.target.date.value,
+        step: 0,
         createdAt: new Date().toISOString(),
         modifiedAt: new Date().toISOString(),
       };

@@ -50,6 +50,10 @@ textarea {
   --red: #db3f3f;
   --green: #5cd8a4;
   --gray: #bdbdbd;
+
+  --dark-red: #a32c2c;
+  --dark-green: #3e9c7a;
+  --dark-gray: #8d8d8d;
 }
 
 main {
@@ -60,6 +64,7 @@ main {
   justify-content: center;
   gap: 40px;
   margin: 0 auto;
+  margin-bottom: 50px;
   @media screen and (max-width: 1000px) {
     padding: 0 20px;
   }

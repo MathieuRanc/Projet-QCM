@@ -13,14 +13,8 @@
           :id="quiz.id"
           :title="quiz.promo + ' - ' + quiz.subject"
           :type="quiz.type"
-          :date="
-            new Date(quiz.date).toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          "
+          :step="quiz.step || 0"
+          :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
         />
       </div>
     </div>
@@ -35,14 +29,8 @@
           :id="quiz.id"
           :title="quiz.promo + ' - ' + quiz.subject"
           :type="quiz.type"
-          :date="
-            new Date(quiz.date).toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          "
+          :step="quiz.step || 0"
+          :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
         />
       </div>
     </div>
@@ -57,14 +45,8 @@
           :id="i + 1"
           :title="quiz.promo + ' - ' + quiz.subject"
           :type="quiz.type"
-          :date="
-            new Date(quiz.date).toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          "
+          :step="quiz.step || 0"
+          :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
         />
       </div>
     </div>
@@ -102,20 +84,28 @@ export default {
     },
     // compare date in UTC
     passedQuiz() {
-      return this.quizzes.filter((quiz) => {
-        return new Date(quiz.date) < new Date();
-      });
+      return this.quizzes
+        .filter((quiz) => {
+          return new Date(quiz.date) < new Date();
+        })
+        .sort((a, b) => {
+          return new Date(b.date) - new Date(a.date);
+        });
     },
     // futur from yesterday
     futureQuiz() {
-      return this.quizzes.filter((quiz) => {
-        return new Date(quiz.date) >= new Date();
-      });
+      return this.quizzes
+        .filter((quiz) => {
+          return new Date(quiz.date) >= new Date();
+        })
+        .sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
     },
     mostRecentsQuizzes() {
       return this.quizzes
         .sort((a, b) => {
-          return new Date(b.date) - new Date(a.date);
+          return new Date(b.modifiedAt) - new Date(a.modifiedAt);
         })
         .slice(0, 3);
     },

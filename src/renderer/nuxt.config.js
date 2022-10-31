@@ -12,9 +12,13 @@ module.exports = {
     meta: [{ charset: 'utf-8' }],
   },
   loading: false,
-  plugins: [{ ssr: true, src: '@/plugins/icons.js' }],
+  plugins: [
+    { ssr: true, src: '@/plugins/icons.js' },
+    { ssr: true, src: '@/plugins/dropzone.js' },
+  ],
   buildModules: [],
-  modules: ['@nuxt/content'],
+  modules: [],
+
   // router: {
   //   middleware: ['adjustScroll'],
   // },
