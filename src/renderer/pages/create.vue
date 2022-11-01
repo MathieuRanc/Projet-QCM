@@ -39,19 +39,6 @@
 
 <script>
 const db = require('electron-db');
-// const path = require('path');
-
-// This will save the database in the same directory as the application.
-// const location = path.join(__dirname, '');
-
-db.createTable('quiz', (succ, msg) => {
-  // succ - boolean, tells if the call is successful
-  if (succ) {
-    console.log(msg);
-  } else {
-    console.log('An error has occured. ' + msg);
-  }
-});
 export default {
   name: 'Create',
   data() {

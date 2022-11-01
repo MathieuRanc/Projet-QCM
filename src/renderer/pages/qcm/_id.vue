@@ -573,7 +573,7 @@ section {
 section.current {
   > div {
     transition: transform 0.2s, max-height 1s;
-    max-height: 610px;
+    max-height: 620px;
     :not(h2) {
       transition: opacity 1s;
       opacity: 1;

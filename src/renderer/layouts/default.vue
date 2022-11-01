@@ -33,6 +33,7 @@ export default {
 body {
   margin: 0 !important;
   font-family: Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
 }
 
 input,
@@ -67,6 +68,11 @@ main {
   margin-bottom: 50px;
   @media screen and (max-width: 1000px) {
     padding: 0 20px;
+  }
+  > div.container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
   }
 }
 

@@ -8,7 +8,8 @@
     "build": "node .electron-nuxt/build.js",
     "build:all": "electron-builder -mwl",
     "preinstall": "node .electron-nuxt/check-engines.js",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "app:dir": "node .electron-nuxt/build.js --dist"
   },
   "keywords": [],
   "author": "Mathieu <dev@mathieuranc.fr>",

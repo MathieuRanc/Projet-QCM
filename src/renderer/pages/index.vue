@@ -4,50 +4,56 @@
       <h2>Apprendre à générer un QCM</h2>
       <h3>Parcourez la documentation pour apprendre à utiliser l’application</h3>
     </NuxtLink>
-    <div class="grid">
-      <h1>Récents</h1>
-      <div>
-        <Card
-          v-for="(quiz, i) in mostRecentsQuizzes"
-          :key="i"
-          :id="quiz.id"
-          :title="quiz.promo + ' - ' + quiz.subject"
-          :type="quiz.type"
-          :step="quiz.step || 0"
-          :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
-        />
+    <label class="searchbar" for="search">
+      <input type="text" id="search" v-model="search" placeholder="Chercher un quiz" />
+    </label>
+
+    <div class="container">
+      <div class="grid">
+        <h1>Récents</h1>
+        <div>
+          <Card
+            v-for="(quiz, i) in mostRecentsQuizzes"
+            :key="i"
+            :id="quiz.id"
+            :title="quiz.promo + ' - ' + quiz.subject"
+            :type="quiz.type"
+            :step="quiz.step || 0"
+            :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
+          />
+        </div>
       </div>
-    </div>
-    <div class="grid">
-      <h1>
-        Epreuves à venir <span>({{ futureQuiz.length }})</span>
-      </h1>
-      <div>
-        <Card
-          v-for="(quiz, i) in futureQuiz"
-          :key="i"
-          :id="quiz.id"
-          :title="quiz.promo + ' - ' + quiz.subject"
-          :type="quiz.type"
-          :step="quiz.step || 0"
-          :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
-        />
+      <div class="grid">
+        <h1>
+          Epreuves à venir <span>({{ futureQuiz.length }})</span>
+        </h1>
+        <div>
+          <Card
+            v-for="(quiz, i) in futureQuiz"
+            :key="i"
+            :id="quiz.id"
+            :title="quiz.promo + ' - ' + quiz.subject"
+            :type="quiz.type"
+            :step="quiz.step || 0"
+            :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
+          />
+        </div>
       </div>
-    </div>
-    <div class="grid">
-      <h1>
-        Epreuves passées <span>({{ passedQuiz.length }})</span>
-      </h1>
-      <div>
-        <Card
-          v-for="(quiz, i) in passedQuiz"
-          :key="i"
-          :id="i + 1"
-          :title="quiz.promo + ' - ' + quiz.subject"
-          :type="quiz.type"
-          :step="quiz.step || 0"
-          :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
-        />
+      <div class="grid">
+        <h1>
+          Epreuves passées <span>({{ passedQuiz.length }})</span>
+        </h1>
+        <div>
+          <Card
+            v-for="(quiz, i) in passedQuiz"
+            :key="i"
+            :id="i + 1"
+            :title="quiz.promo + ' - ' + quiz.subject"
+            :type="quiz.type"
+            :step="quiz.step || 0"
+            :date="new Date(quiz.date).toLocaleDateString('fr-FR')"
+          />
+        </div>
       </div>
     </div>
   </main>
@@ -68,6 +74,11 @@ export default {
   components: {
     Card,
   },
+  data() {
+    return {
+      search: '',
+    };
+  },
   computed: {
     quizzes() {
       var quizzes;
@@ -77,6 +88,16 @@ export default {
           quizzes = data.sort((a, b) => {
             // less 1 day to compare date in UTC
             return new Date(b.date) - new Date(a.date);
+          });
+        } else {
+          quizzes = [];
+          db.createTable('quiz', (succ, msg) => {
+            // succ - boolean, tells if the call is successful
+            if (succ) {
+              console.log(msg);
+            } else {
+              console.log('An error has occured. ' + msg);
+            }
           });
         }
       });
@@ -114,6 +135,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.searchbar {
+  width: 100%;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  padding-left: 50px;
+  margin-bottom: 20px;
+  border-radius: 50px;
+  transition: all 0.2s ease-in-out;
+  &:focus,
+  &:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  cursor: text;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: url('~/assets/images/search.svg') no-repeat center center;
+    background-size: 20px;
+  }
+  input {
+    border: none;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+  }
+}
+
 .hero {
   background-image: url('~/assets/images/tutoriel.jpg');
   background-size: cover;

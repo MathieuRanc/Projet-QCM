@@ -6,6 +6,7 @@ app.on('window-all-closed', function () {
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
 })
+console.log(app.getPath('userData'));
 
 // Load here all startup windows
 require('./mainWindow')
