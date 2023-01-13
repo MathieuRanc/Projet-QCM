@@ -45,7 +45,14 @@
           Déposer un corrigé, un corrigé est une feuille d’examen contenant les réponses correctes aux questions, vous
           pouvez suivre ce lien pour <a href="/" download>télécharger un fichier exemple</a>.
         </p>
-        <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone>
+        <!-- <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone> -->
+        <!-- <dropzone id="foo" :options="options" :destroyDropzone="true" ref="fileInput" @change="addFile"></dropzone> -->
+        <input type="file" ref="fileInput" @change="addFile" />
+        <button class="validate" @click="uploadFiles">
+          <!-- fontawesome upload -->
+          <i class="fas fa-upload"></i>
+          Téléverser le corrigé {{ uploadProgress }}
+        </button>
         <div class="validation">
           <button class="validate" @click="validateStep">
             <!-- fontawesome check -->
@@ -202,11 +209,14 @@
 <script>
 var db = require('electron-db');
 
+import Resumable from 'resumablejs';
 import Dropzone from 'nuxt-dropzone';
 import 'nuxt-dropzone/dropzone.css';
 export default {
   data() {
     return {
+      resumable: null,
+      uploadProgress: 0,
       copies: 0,
       myFiles: ['tutoriel.jpg'],
       options: {
@@ -230,6 +240,12 @@ export default {
     },
   },
   methods: {
+    addFile() {
+      this.resumable.addFile(this.$refs.fileInput.files[0]);
+    },
+    uploadFiles() {
+      this.resumable.upload();
+    },
     renameQuiz() {},
     deleteQuiz() {},
     uploadCorrection() {},
@@ -316,6 +332,15 @@ export default {
     } else {
       document.querySelector('section').classList.add('current');
     }
+    this.resumable = new Resumable({
+      target: 'http://localhost:8000/upload',
+      chunkSize: 1 * 1024 * 1024,
+      simultaneousUploads: 1,
+      testChunks: false,
+    });
+    this.resumable.on('fileProgress', (file) => {
+      this.uploadProgress = file.progress();
+    });
   },
 };
 </script>

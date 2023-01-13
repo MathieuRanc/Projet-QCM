@@ -23,20 +23,30 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/create_quiz/{id}', function (Request $request, Response $response, $args) {
+    $app->get('/create_quiz/{name}', function (Request $request, Response $response, $args) {
         // return 
-        $quiz_name = $args['id'];
-        system($quiz_bin_dir . "create_quiz.sh " . $quiz_name . " &", $returnval);
-        $data = array('message' => 'Correction quizz ' . +$quiz_name . +$returnval);
+        $quiz_name = $args['name'];
+        // $quiz_name = "test34";
+        // system(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name . " &", $returnval);
+        $result = exec(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
+        if (str_starts_with($result, "Quiz")) {
+            // success
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
+        } else {
+            // erreur
+            $response = $response->withStatus(304);
+            $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name);
+        }
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
     });
-    $app->get('/prepare_correction/{id}', function (Request $request, Response $response, $args) {
+    $app->get('/prepare_correction/{name}', function (Request $request, Response $response, $args) {
         // return 
-        $quiz_name = $args['id'];
-        system($quiz_bin_dir . "prepare_correction.sh " . $quiz_name . " &", $returnval);
-        $data = array('message' => 'Correction quizz ' . +$quiz_name . +$returnval);
+        $quiz_name = $args['name'];
+        system(__DIR__ . "/../bin/prepare_correction.sh " . $quiz_name . " &", $returnval);
+        $data = array('message' => 'Correction quizz ' . $quiz_name . $returnval);
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
@@ -44,8 +54,8 @@ return function (App $app) {
     $app->get('/correct_quiz/{id}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['id'];
-        system($quiz_bin_dir . "create_quiz.sh " . $quiz_name . " &", $returnval);
-        $data = array('message' => 'Correction quizz ' . +$quiz_name . +$returnval);
+        system(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name . " &", $returnval);
+        $data = array('message' => 'Correction quizz ' . $quiz_name . $returnval);
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
@@ -53,8 +63,8 @@ return function (App $app) {
     $app->get('/omr/{id}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['id'];
-        system($quiz_bin_dir . "omr.sh " . $quiz_name . " &", $returnval);
-        $data = array('message' => 'Correction quizz ' . +$quiz_name . +$returnval);
+        system(__DIR__ . "/../bin/omr.sh " . $quiz_name . " &", $returnval);
+        $data = array('message' => 'Correction quizz ' . $quiz_name . $returnval);
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
@@ -62,8 +72,8 @@ return function (App $app) {
     $app->get('/omr_errors_resolved/{id}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['id'];
-        system($quiz_bin_dir . "omr_errors_resolved.sh " . $quiz_name . " &", $returnval);
-        $data = array('message' => 'Correction quizz ' . +$quiz_name . +$returnval);
+        system(__DIR__ . "/../bin/omr_errors_resolved.sh " . $quiz_name . " &", $returnval);
+        $data = array('message' => 'Correction quizz ' . $quiz_name . $returnval);
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
@@ -72,5 +82,56 @@ return function (App $app) {
     $app->group('/users', function (Group $group) {
         $group->get('', ListUsersAction::class);
         $group->get('/{id}', ViewUserAction::class);
+    });
+
+    $app->post('/upload', function (Request $request, Response $response, $args) {
+        $directory = __DIR__ . '/../uploads/'; // répertoire de destination de l'upload
+        $resumableIdentifier = $request->getParsedBody()['resumableIdentifier']; // identifiant de l'upload
+        $resumableFilename = $request->getParsedBody()['resumableFilename']; // nom du fichier
+        $resumableChunkNumber = $request->getParsedBody()['resumableChunkNumber']; // numéro de chunk
+        $resumableTotalChunks = $request->getParsedBody()['resumableTotalChunks']; // nombre total de chunks
+
+        $tmp_name = $directory . 'temp/' . $resumableIdentifier . '/' . $resumableChunkNumber;
+        $filePath = $directory . $resumableFilename;
+
+        // Vérifie si le fichier existe déjà
+        if (file_exists($filePath)) {
+            // Si oui, vérifie si le chunk a déjà été uploadé
+            if (file_exists($tmp_name)) {
+                $response->getBody()->write("Chunk already exists.");
+                return $response->withStatus(200);
+            }
+        }
+
+        // Crée le répertoire temporaire s'il n'existe pas
+        if (!file_exists($directory . 'temp/' . $resumableIdentifier)) {
+            mkdir($directory . 'temp/' . $resumableIdentifier, 0777, true);
+        }
+
+        // Enregistre le chunk sur le serveur
+        move_uploaded_file($_FILES['file']['tmp_name'], $tmp_name);
+
+        // Vérifie si tous les chunks ont été uploadés
+        if ($resumableChunkNumber == $resumableTotalChunks) {
+            // Réassemble les chunks en un seul fichier
+            for ($i = 1; $i <= $resumableTotalChunks; $i++) {
+                $chunk = $directory . 'temp/' . $resumableIdentifier . '/' . $i;
+                $buffer = file_get_contents($chunk);
+                file_put_contents($filePath, $buffer, FILE_APPEND);
+                unlink($chunk);
+            }
+
+            // Supprime le répertoire temporaire
+            rmdir($directory . 'temp/' . $resumableIdentifier);
+
+            // return json with success message and file path
+            $data = array('message' => 'Le fichier ' . $resumableFilename . ' a été uploadé avec succès', 'path' => $filePath);
+        } else {
+            // return json with success message
+            $data = array('message' => 'Le chunk ' . $resumableChunkNumber . ' a été uploadé avec succès');
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response->withStatus(200);
     });
 };

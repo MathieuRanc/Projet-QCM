@@ -31,16 +31,19 @@
     "deepmerge": "^4.2.2",
     "electron": "^16.0.5",
     "electron-builder": "^23.6.0",
+    "electron-db": "^0.15.7",
     "electron-devtools-installer": "^3.2.0",
+    "electron-packager": "^17.0.0",
+    "nedb": "^1.8.0",
     "nuxt": "^2.15.8",
+    "nuxt-dropzone": "^1.0.4",
+    "path": "^0.12.7",
     "sass": "^1.55.0",
     "sass-loader": "10",
     "webpack": "^4.46.0",
-    "webpack-node-externals": "^3.0.0",
-    "electron-db": "^0.15.7",
-    "electron-packager": "^17.0.0",
-    "nedb": "^1.8.0",
-    "nuxt-dropzone": "^1.0.4",
-    "path": "^0.12.7"
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "resumablejs": "^1.1.0"
   }
 }

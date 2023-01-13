@@ -15,6 +15,7 @@ module.exports = {
   plugins: [
     { ssr: true, src: '@/plugins/icons.js' },
     { ssr: true, src: '@/plugins/dropzone.js' },
+    { ssr: true, src: '@/plugins/resumable.js' },
   ],
   buildModules: [],
   modules: [],
