@@ -18,7 +18,7 @@ module.exports = {
     { ssr: true, src: '@/plugins/resumable.js' },
   ],
   buildModules: [],
-  modules: [],
+  modules: ['@nuxtjs/axios'],
 
   // router: {
   //   middleware: ['adjustScroll'],

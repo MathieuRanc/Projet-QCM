@@ -37,7 +37,7 @@
   </main>
 </template>
 
-<script>
+<script lang="js">
 const db = require('electron-db');
 export default {
   name: 'Create',
@@ -47,7 +47,7 @@ export default {
     };
   },
   methods: {
-    submit(event) {
+    async submit(event)  {
       const quiz = {
         promo: event.target.promo.value,
         subject: event.target.subject.value,
@@ -58,6 +58,11 @@ export default {
         modifiedAt: new Date().toISOString(),
       };
       console.log(quiz);
+
+      // request localhot:8000/quiz/create with param name
+      await this.$axios.$post('http://localhost:8000/quiz/create', {
+        name: quiz.promo + '_' + quiz.subject + '_' + quiz.type + '_' + quiz.date,
+      });
 
       db.insertTableContent('quiz', quiz, (succ, msg) => {
         // succ - boolean, tells if the call is successful

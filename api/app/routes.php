@@ -23,9 +23,10 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/create_quiz/{name}', function (Request $request, Response $response, $args) {
-        // return 
-        $quiz_name = $args['name'];
+    $app->post('/quiz/create', function (Request $request, Response $response, $args) {
+        // save from request body
+        $data = $request->getParsedBody();
+        $quiz_name = $data['name'];
         // $quiz_name = "test34";
         // system(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name . " &", $returnval);
         $result = exec(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
@@ -33,6 +34,14 @@ return function (App $app) {
             // success
             $response = $response->withStatus(200);
             $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
+            // create quiz in mysql db
+            $db = new PDO('mysql:host=127.0.0.1;dbname=qcm;charset=utf8', 'root', 'root');
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $stmt = $db->prepare("INSERT INTO qcm (name) VALUES (:name)");
+            $stmt->bindParam(':name', $quiz_name);
+            $stmt->execute();
         } else {
             // erreur
             $response = $response->withStatus(304);
@@ -85,7 +94,7 @@ return function (App $app) {
     });
 
     $app->post('/upload', function (Request $request, Response $response, $args) {
-        $directory = __DIR__ . '/../uploads/'; // répertoire de destination de l'upload
+        $directory = __DIR__ . '/../src/Uploads/'; // répertoire de destination de l'upload
         $resumableIdentifier = $request->getParsedBody()['resumableIdentifier']; // identifiant de l'upload
         $resumableFilename = $request->getParsedBody()['resumableFilename']; // nom du fichier
         $resumableChunkNumber = $request->getParsedBody()['resumableChunkNumber']; // numéro de chunk
