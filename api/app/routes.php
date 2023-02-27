@@ -17,7 +17,7 @@ return function (App $app) {
 
     $app->get('/', function (Request $request, Response $response) {
         // return JSON
-        $data = array('message' => 'Hello worlds lol mathieu');
+        $data = array('message' => 'Hello worlds lol mathieu en roue libre');
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
@@ -51,7 +51,26 @@ return function (App $app) {
         $response->getBody()->write(json_encode($data));
         return $response;
     });
-    $app->get('/prepare_correction/{name}', function (Request $request, Response $response, $args) {
+    $app->post('/quiz/prepare_correction', function (Request $request, Response $response, $args) {
+        // save from request body
+        $data = $request->getParsedBody();
+        $quiz_name = $data['name'];
+        $result = exec(__DIR__ . "/../bin/prepare_correction.sh " . $quiz_name);
+        if (str_starts_with($result, "All done")) {
+            // success
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Le quiz ' . $quiz_name . ' a été preparé pour la correction ');
+        } else {
+            // erreur
+            $response = $response->withStatus(304);
+            $data = array('message' => 'Erreur lors de la préparation de la correction ' . $quiz_name);
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response;
+    });
+
+    /*$app->get('/prepare_correction/{name}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['name'];
         system(__DIR__ . "/../bin/prepare_correction.sh " . $quiz_name . " &", $returnval);
@@ -59,16 +78,35 @@ return function (App $app) {
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
-    });
-    $app->get('/correct_quiz/{id}', function (Request $request, Response $response, $args) {
-        // return 
-        $quiz_name = $args['id'];
-        system(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name . " &", $returnval);
-        $data = array('message' => 'Correction quizz ' . $quiz_name . $returnval);
+    });*/
+    $app->post('/quiz/correct', function (Request $request, Response $response, $args) {
+        // save from request body
+        $data = $request->getParsedBody();
+        $quiz_name = $data['name'];
+        $result = exec(__DIR__ . "/../bin/correct_quiz.sh " . $quiz_name);
+        if (str_starts_with($result, "All done")) {
+            // success
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Le quiz ' . $quiz_name . ' a été corrigé ');
+        } else {
+            // erreur
+            $response = $response->withStatus(304);
+            $data = array('message' => 'Erreur lors de la correction ' . $quiz_name);
+        }
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
     });
+
+    /*$app->get('/correct_quiz/{id}', function (Request $request, Response $response, $args) {
+        // return 
+        $quiz_name = $args['id'];
+        system(__DIR__ . "/../bin/correct_quiz.sh " . $quiz_name . " &", $returnval);
+        $data = array('message' => 'Correction quizz ' . $quiz_name . $returnval);
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response;
+    });*/
     $app->get('/omr/{id}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['id'];
