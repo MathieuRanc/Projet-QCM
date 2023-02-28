@@ -107,7 +107,7 @@ return function (App $app) {
         $response->getBody()->write(json_encode($data));
         return $response;
     });*/
-    $app->get('/omr/{id}', function (Request $request, Response $response, $args) {
+    /*$app->get('/omr/{id}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['id'];
         system(__DIR__ . "/../bin/omr.sh " . $quiz_name . " &", $returnval);
@@ -115,8 +115,26 @@ return function (App $app) {
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
+    });*/
+    $app->post('/quiz/omr', function (Request $request, Response $response, $args) {
+        // save from request body
+        $data = $request->getParsedBody();
+        $quiz_name = $data['name'];
+        $result = exec(__DIR__ . "/../bin/omr.sh " . $quiz_name);
+        if (str_starts_with($result, "All done")) {
+            // success
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Execution du script OMR réussie sur le quizz ' . $quiz_name);
+        } else {
+            // erreur
+            $response = $response->withStatus(304);
+            $data = array('message' => 'Erreur lors du script OMR ' . $quiz_name);
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response;
     });
-    $app->get('/omr_errors_resolved/{id}', function (Request $request, Response $response, $args) {
+/*    $app->get('/omr_errors_resolved/{id}', function (Request $request, Response $response, $args) {
         // return 
         $quiz_name = $args['id'];
         system(__DIR__ . "/../bin/omr_errors_resolved.sh " . $quiz_name . " &", $returnval);
@@ -124,8 +142,25 @@ return function (App $app) {
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
         return $response;
+    });*/
+    $app->post('/quiz/omr_errors_resolved', function (Request $request, Response $response, $args) {
+        // save from request body
+        $data = $request->getParsedBody();
+        $quiz_name = $data['name'];
+        $result = exec(__DIR__ . "/../bin/omr_errors_resolved.sh " . $quiz_name);
+        if (str_starts_with($result, "All done")) {
+            // success
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Execution du script OMR errors réussie sur le quizz ' . $quiz_name);
+        } else {
+            // erreur
+            $response = $response->withStatus(304);
+            $data = array('message' => 'Erreur lors du script OMR errors' . $quiz_name);
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response;
     });
-
     $app->group('/users', function (Group $group) {
         $group->get('', ListUsersAction::class);
         $group->get('/{id}', ViewUserAction::class);
