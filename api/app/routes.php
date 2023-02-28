@@ -29,23 +29,35 @@ return function (App $app) {
         $quiz_name = $data['name'];
         // $quiz_name = "test34";
         // system(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name . " &", $returnval);
-        $result = exec(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
-        if (str_starts_with($result, "Quiz")) {
-            // success
-            $response = $response->withStatus(200);
-            $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
-            // create quiz in mysql db
-            $db = new PDO('mysql:host=127.0.0.1;dbname=qcm;charset=utf8', 'root', 'root');
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $stmt = $db->prepare("INSERT INTO qcm (name) VALUES (:name)");
-            $stmt->bindParam(':name', $quiz_name);
-            $stmt->execute();
-        } else {
-            // erreur
-            $response = $response->withStatus(304);
-            $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name);
+        try {
+            $result = exec(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
+
+            if (str_starts_with($result, "Quiz")) {
+                // success
+                $response = $response->withStatus(200);
+                $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
+                // // create quiz in mysql db
+
+                try {
+                    $db = new PDO('mysql:host=127.0.0.1;dbname=qcm;charset=utf8', 'root', 'root');
+                    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                    $stmt = $db->prepare("INSERT INTO qcm (name) VALUES (:name)");
+                    $stmt->bindParam(':name', $quiz_name);
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    $response = $response->withStatus(500);
+                    $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+                }
+            } else {
+                // erreur
+                $response = $response->withStatus(304);
+                $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name);
+            }
+        } catch (Exception $e) {
+            $response = $response->withStatus(500);
+            $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name . ' : ' . $e->getMessage());
         }
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
