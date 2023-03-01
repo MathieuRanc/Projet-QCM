@@ -30,7 +30,7 @@ return function (App $app) {
         // $quiz_name = "test34";
         // system(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name . " &", $returnval);
         try {
-            $result = exec(__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
+            $result = exec("bash ".__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
 
             if (str_starts_with($result, "Quiz")) {
                 // success
@@ -67,7 +67,7 @@ return function (App $app) {
         // save from request body
         $data = $request->getParsedBody();
         $quiz_name = $data['name'];
-        $result = exec(__DIR__ . "/../bin/prepare_correction.sh " . $quiz_name);
+        $result = exec("bash ".__DIR__ . "/../bin/prepare_correction.sh " . $quiz_name);
         if (str_starts_with($result, "All done")) {
             // success
             $response = $response->withStatus(200);
@@ -95,7 +95,7 @@ return function (App $app) {
         // save from request body
         $data = $request->getParsedBody();
         $quiz_name = $data['name'];
-        $result = exec(__DIR__ . "/../bin/correct_quiz.sh " . $quiz_name);
+        $result = exec("bash ".__DIR__ . "/../bin/correct_quiz.sh " . $quiz_name);
         if (str_starts_with($result, "All done")) {
             // success
             $response = $response->withStatus(200);
@@ -132,7 +132,7 @@ return function (App $app) {
         // save from request body
         $data = $request->getParsedBody();
         $quiz_name = $data['name'];
-        $result = exec(__DIR__ . "/../bin/omr.sh " . $quiz_name);
+        $result = exec("bash ".__DIR__ . "/../bin/omr.sh " . $quiz_name);
         if (str_starts_with($result, "All done")) {
             // success
             $response = $response->withStatus(200);
@@ -159,7 +159,7 @@ return function (App $app) {
         // save from request body
         $data = $request->getParsedBody();
         $quiz_name = $data['name'];
-        $result = exec(__DIR__ . "/../bin/omr_errors_resolved.sh " . $quiz_name);
+        $result = exec("bash ".__DIR__ . "/../bin/omr_errors_resolved.sh " . $quiz_name);
         if (str_starts_with($result, "All done")) {
             // success
             $response = $response->withStatus(200);

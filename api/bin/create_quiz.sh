@@ -1,8 +1,6 @@
 #!/bin/bash
-
 SCRIPT_DIR=`dirname $0`
 source ${SCRIPT_DIR}/quiz_common.sh
-
 if [ -d ${QUIZ_DIR} ] 
 then
     echo "Error: Quiz directory already exists."
