@@ -17,9 +17,10 @@ RUN apt update -y \
 && apt update -y\
 && apt upgrade -y\
 && apt install php -y  \
-&& apt install composer -y \ 
-&& sed -i '4i php -S 0.0.0.0:8000&' /usr/local/bin/docker-entrypoint.sh
+&& apt install composer -y \
+&& apt install php-xml -y  \
+&& sed -i '5i composer install --working-dir=/api&' /usr/local/bin/docker-entrypoint.sh \
+&& sed -i '4i php -S 0.0.0.0:8000&' /usr/local/bin/docker-entrypoint.sh 
+
 
 EXPOSE 8000
-
-
