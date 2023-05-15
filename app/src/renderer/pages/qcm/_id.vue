@@ -48,10 +48,11 @@
         <!-- <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone> -->
         <!-- <dropzone id="foo" :options="options" :destroyDropzone="true" ref="fileInput" @change="addFile"></dropzone> -->
         <input type="file" ref="fileInput" @change="addFile" />
-        <button class="validate" @click="uploadFiles">
+        <button class="validate charging" @click="uploadFiles">
           <!-- fontawesome upload -->
           <i class="fas fa-upload"></i>
-          Téléverser le corrigé {{ uploadProgress }}
+          Téléverser le corrigé
+          <span :style="`width: ${uploadProgress * 100}%;`"></span>
         </button>
         <div class="validation">
           <button class="validate" @click="validateStep">
@@ -68,11 +69,11 @@
       <div>
         <h2>Impression des sujets</h2>
         <p>Récupérer une copie vierge pour afin de la photocopier pour l’ensemble des élèves</p>
-        <button @click="downloadBlank">
+        <a class="button" :href="API_BASE_URL + '/modele.pdf'" download="copie_vierge.pdf">
           <!-- fontawesome file download  -->
           <i class="fas fa-file-download"></i>
           Télécharger une copie vierge
-        </button>
+        </a>
         <div class="or">OU</div>
         <p>
           Récupérer des copies numérotées, sélectionnez un nombre de copies puis téléchargez les copies via le bouton de
@@ -222,6 +223,7 @@ export default {
       options: {
         url: 'http://httpbin.org/anything',
       },
+      API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost:8000',
     };
   },
   components: {
@@ -247,9 +249,33 @@ export default {
       this.resumable.upload();
     },
     renameQuiz() {},
-    deleteQuiz() {},
+    deleteQuiz() {
+      // delete quiz
+      // make request to delete quiz on server
+      this.$axios
+        .delete(`${this.API_BASE_URL}/quiz/${this.$route.params.id}`)
+        .then((response) => {
+          db.deleteRow('quiz', { id: parseInt(this.$route.params.id) }, (succ, msg) => {
+            if (succ) {
+              this.$router.push('/quiz');
+            }
+          });
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     uploadCorrection() {},
-    downloadBlank() {},
+    // downloadBlank() {
+    //   // download image in the api with url API_URL + /modele.pdf
+
+    //   // download file
+    //   const { ipcRenderer } = require('electron');
+    //   ipcRenderer.send('download-file', {
+    //     url: process.env.API_URL + '/modele.pdf',
+    //   });
+    // },
     downloadCopies() {},
     uploadStudents() {},
     uploadStudentsCopies() {},
@@ -333,7 +359,7 @@ export default {
       document.querySelector('section').classList.add('current');
     }
     this.resumable = new Resumable({
-      target: 'http://localhost:8000/upload',
+      target: this.API_BASE_URL + '/upload',
       chunkSize: 1 * 1024 * 1024,
       simultaneousUploads: 1,
       testChunks: false,
@@ -479,7 +505,10 @@ section {
       font-size: 16px;
       font-weight: 700;
     }
-    button {
+    button,
+    .button {
+      text-decoration: none;
+      font-weight: normal;
       background-color: var(--red);
       color: white;
       border: none;
@@ -621,6 +650,23 @@ section.done {
   > span {
     background-color: var(--green);
     color: white;
+  }
+}
+
+.charging {
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  span {
+    z-index: -1;
+    height: 100%;
+    position: absolute;
+    display: block;
+    background-color: var(--green);
+    width: 0;
+    transition: all 0.3s;
+    top: 0;
+    left: 0;
   }
 }
 </style>
