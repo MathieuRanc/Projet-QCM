@@ -1,0 +1,204 @@
+Récupération des arguments
+Chargement de l'image
+rapport 1.414516129032258
+correction des mesures suivants les proportions de l'image rapport=1.414516129032258 rapport_standard=1.414752116082225
+nouvelle proportion=0.7495726495726496
+étude des pixels de l'image
+pixels w1240;h1754 nbpixels2174960 elems149266
+Analyse coins 2
+coin retenu 58.514377788795244;91.98438274665345 4034
+Reperes 110
+Recherche de la rotation à effectuer
+coin 58.514377788795244;91.98438274665345 27;90 ; 60;124 1240;1754
+Marque en haut à gauche
+orientation=0
+Rotation listes repères
+liste_h 90
+liste_v 20
+Position coin avant rotation 58.514377788795244;91.98438274665345
+Position coin après rotation 58.514377788795244;91.98438274665345
+Determination des listes de repères gauche droite haut bas
+liste_gauche 45
+liste_droite 45
+liste_haut 10
+liste_bas 10
+Correction Image
+nouvelles dimensions w=1240 h=1754
+Image corrigée
+hauteur=1754 __ largeur=1240
+Tri des listes de repères suivant leur position
+57.90791366906475 253.01007194244605
+52.99569583931133 1550.0071736011478
+hy=1297.0064038373441
+alpha=-0.21699971697823842
+temps 0.426s
+Récupération des arguments
+Chargement de l'image
+rapport 1.414516129032258
+correction des mesures suivants les proportions de l'image rapport=1.414516129032258 rapport_standard=1.414752116082225
+nouvelle proportion=0.7495726495726496
+étude des pixels de l'image
+pixels w1240;h1754 nbpixels2174960 elems149473
+Analyse coins 2
+coin retenu 52.387845849802375;91.09486166007905 4048
+Reperes 112
+Recherche de la rotation à effectuer
+coin 52.387845849802375;91.09486166007905 20;84 ; 60;123 1240;1754
+Marque en haut à gauche
+orientation=0
+Rotation listes repères
+liste_h 90
+liste_v 22
+Position coin avant rotation 52.387845849802375;91.09486166007905
+Position coin après rotation 52.387845849802375;91.09486166007905
+Determination des listes de repères gauche droite haut bas
+liste_gauche 45
+liste_droite 45
+liste_haut 0
+liste_bas 0
+Correction Image
+nouvelles dimensions w=1240 h=1754
+Image corrigée
+hauteur=1754 __ largeur=1240
+Tri des listes de repères suivant leur position
+51.54117647058823 252.49281045751633
+49.45827439886846 1550.991513437058
+hy=1298.5003735542755
+alpha=-0.09190721193615994
+temps 0.218s
+Récupération des arguments
+Chargement de l'image
+rapport 1.414516129032258
+correction des mesures suivants les proportions de l'image rapport=1.414516129032258 rapport_standard=1.414752116082225
+nouvelle proportion=0.7495726495726496
+étude des pixels de l'image
+pixels w1240;h1754 nbpixels2174960 elems147116
+Analyse coins 2
+coin retenu 59.87574701195219;91.29631474103586 4016
+Reperes 111
+Recherche de la rotation à effectuer
+coin 59.87574701195219;91.29631474103586 28;92 ; 60;123 1240;1754
+Marque en haut à gauche
+orientation=0
+Rotation listes repères
+liste_h 90
+liste_v 21
+Position coin avant rotation 59.87574701195219;91.29631474103586
+Position coin après rotation 59.87574701195219;91.29631474103586
+Determination des listes de repères gauche droite haut bas
+liste_gauche 45
+liste_droite 45
+liste_haut 0
+liste_bas 0
+Correction Image
+nouvelles dimensions w=1240 h=1754
+Image corrigée
+hauteur=1754 __ largeur=1240
+Tri des listes de repères suivant leur position
+59.09871244635193 252.06294706723892
+54.772 1548.544
+hy=1296.4882726250303
+alpha=-0.19121100262954527
+temps 0.208s
+Récupération des arguments
+Chargement de l'image
+rapport 1.414516129032258
+correction des mesures suivants les proportions de l'image rapport=1.414516129032258 rapport_standard=1.414752116082225
+nouvelle proportion=0.7495726495726496
+étude des pixels de l'image
+pixels w1240;h1754 nbpixels2174960 elems149266
+Analyse coins 2
+coin retenu 58.514377788795244;91.98438274665345 4034
+Reperes 110
+Recherche de la rotation à effectuer
+coin 58.514377788795244;91.98438274665345 27;90 ; 60;124 1240;1754
+Marque en haut à gauche
+orientation=0
+Rotation listes repères
+liste_h 90
+liste_v 20
+Position coin avant rotation 58.514377788795244;91.98438274665345
+Position coin après rotation 58.514377788795244;91.98438274665345
+Determination des listes de repères gauche droite haut bas
+liste_gauche 45
+liste_droite 45
+liste_haut 10
+liste_bas 10
+Correction Image
+nouvelles dimensions w=1240 h=1754
+Image corrigée
+hauteur=1754 __ largeur=1240
+Tri des listes de repères suivant leur position
+57.90791366906475 253.01007194244605
+52.99569583931133 1550.0071736011478
+hy=1297.0064038373441
+alpha=-0.21699971697823842
+temps 0.204s
+Récupération des arguments
+Chargement de l'image
+rapport 1.414516129032258
+correction des mesures suivants les proportions de l'image rapport=1.414516129032258 rapport_standard=1.414752116082225
+nouvelle proportion=0.7495726495726496
+étude des pixels de l'image
+pixels w1240;h1754 nbpixels2174960 elems149473
+Analyse coins 2
+coin retenu 52.387845849802375;91.09486166007905 4048
+Reperes 112
+Recherche de la rotation à effectuer
+coin 52.387845849802375;91.09486166007905 20;84 ; 60;123 1240;1754
+Marque en haut à gauche
+orientation=0
+Rotation listes repères
+liste_h 90
+liste_v 22
+Position coin avant rotation 52.387845849802375;91.09486166007905
+Position coin après rotation 52.387845849802375;91.09486166007905
+Determination des listes de repères gauche droite haut bas
+liste_gauche 45
+liste_droite 45
+liste_haut 0
+liste_bas 0
+Correction Image
+nouvelles dimensions w=1240 h=1754
+Image corrigée
+hauteur=1754 __ largeur=1240
+Tri des listes de repères suivant leur position
+51.54117647058823 252.49281045751633
+49.45827439886846 1550.991513437058
+hy=1298.5003735542755
+alpha=-0.09190721193615994
+temps 0.207s
+Récupération des arguments
+Chargement de l'image
+rapport 1.414516129032258
+correction des mesures suivants les proportions de l'image rapport=1.414516129032258 rapport_standard=1.414752116082225
+nouvelle proportion=0.7495726495726496
+étude des pixels de l'image
+pixels w1240;h1754 nbpixels2174960 elems147116
+Analyse coins 2
+coin retenu 59.87574701195219;91.29631474103586 4016
+Reperes 111
+Recherche de la rotation à effectuer
+coin 59.87574701195219;91.29631474103586 28;92 ; 60;123 1240;1754
+Marque en haut à gauche
+orientation=0
+Rotation listes repères
+liste_h 90
+liste_v 21
+Position coin avant rotation 59.87574701195219;91.29631474103586
+Position coin après rotation 59.87574701195219;91.29631474103586
+Determination des listes de repères gauche droite haut bas
+liste_gauche 45
+liste_droite 45
+liste_haut 0
+liste_bas 0
+Correction Image
+nouvelles dimensions w=1240 h=1754
+Image corrigée
+hauteur=1754 __ largeur=1240
+Tri des listes de repères suivant leur position
+59.09871244635193 252.06294706723892
+54.772 1548.544
+hy=1296.4882726250303
+alpha=-0.19121100262954527
+temps 0.213s
