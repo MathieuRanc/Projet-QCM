@@ -36,18 +36,18 @@ return function (App $app) {
                 $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
                 // // create quiz in mysql db
 
-                // try {
-                //     $db = new PDO('mysql:host=127.0.0.1;dbname=qcm;charset=utf8', 'root', 'root');
-                //     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                //     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                //     $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-                //     $stmt = $db->prepare("INSERT INTO qcm (name) VALUES (:name)");
-                //     $stmt->bindParam(':name', $quiz_name);
-                //     $stmt->execute();
-                // } catch (PDOException $e) {
-                //     $response = $response->withStatus(500);
-                //     $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name . ' : ' . $e->getMessage());
-                // }
+                 try {
+                 $db = new PDO('mysql:host=localhost;dbname=qcm;charset=utf8', 'root', 'root');
+                     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                     $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                     $stmt = $db->prepare("INSERT INTO list (qcmName) VALUES (:quiz_name)");
+                     $stmt->bindParam(':quiz_name', $quiz_name);
+                     $stmt->execute();
+                 } catch (PDOException $e) {
+                     $response = $response->withStatus(500);
+                     $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+                 }
             } else {
                 // erreur
                 $response = $response->withStatus(304);
@@ -61,30 +61,47 @@ return function (App $app) {
         $response->getBody()->write(json_encode($data));
         return $response;
     });
-    $app->post('/quiz/delete', function (Request $request, Response $response, $args) {
-        // save from request body
-        $data = $request->getParsedBody();
-        $quiz_name = $data['name'];
-        try {
-            $result = exec("rm -r ".__DIR__ . "/../" . $quiz_name);
+$app->post('/quiz/delete', function (Request $request, Response $response, $args) {
+    // RÃ©cupÃ©rer les donnÃ©es depuis le corps de la requÃªte
+    $data = $request->getParsedBody();
+    $quiz_name = $data['name'];
 
-            if (str_starts_with($result, "Quiz")) {
-                // success
-                $response = $response->withStatus(200);
-                $data = array('message' => 'Le quiz ' . $quiz_name . ' a été supprimé avec succès');
-            } else {
-                // erreur
-                $response = $response->withStatus(304);
-                $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name);
-            }
-        } catch (Exception $e) {
+    try {
+        $result = exec("rm -r " . __DIR__ . "/../quiz_data/" . $quiz_name);
+
+        if (empty($result)) {
+            // SuccÃ¨s de la suppression du dossier
+
+            $db = new PDO('mysql:host=localhost;dbname=qcm;charset=utf8', 'root', 'root');
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+            $stmt = $db->prepare("DELETE FROM list WHERE qcmName = 'QCM10'");
+            //$stmt->bindParam(':quiz_name', $quiz_name);
+            $stmt->execute();
+
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Le quiz ' . $quiz_name . ' a Ã©tÃ© supprimÃ© avec succÃ¨s');
+        } else {
+            // Erreur lors de la suppression du dossier
             $response = $response->withStatus(500);
-            $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+            $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name);
         }
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode($data));
-        return $response;
-    });
+    } catch (PDOException $e) {
+        // Erreur de la base de donnÃ©es
+        $response = $response->withStatus(500);
+        $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+    } catch (Exception $e) {
+        // Autre erreur
+        $response = $response->withStatus(500);
+        $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+    }
+
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(json_encode($data));
+    return $response;
+});
 
     $app->post('/quiz/omr', function (Request $request, Response $response, $args) {
         // save from request body
