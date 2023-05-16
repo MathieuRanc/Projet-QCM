@@ -61,6 +61,30 @@ return function (App $app) {
         $response->getBody()->write(json_encode($data));
         return $response;
     });
+    $app->post('/quiz/delete', function (Request $request, Response $response, $args) {
+        // save from request body
+        $data = $request->getParsedBody();
+        $quiz_name = $data['name'];
+        try {
+            $result = exec("rm -r ".__DIR__ . "/../" . $quiz_name);
+
+            if (str_starts_with($result, "Quiz")) {
+                // success
+                $response = $response->withStatus(200);
+                $data = array('message' => 'Le quiz ' . $quiz_name . ' a été supprimé avec succès');
+            } else {
+                // erreur
+                $response = $response->withStatus(304);
+                $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name);
+            }
+        } catch (Exception $e) {
+            $response = $response->withStatus(500);
+            $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response;
+    });
 
     $app->post('/quiz/omr', function (Request $request, Response $response, $args) {
         // save from request body
