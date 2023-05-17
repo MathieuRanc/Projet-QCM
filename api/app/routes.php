@@ -37,7 +37,7 @@ return function (App $app) {
                 // // create quiz in mysql db
 
                  try {
-                 $db = new PDO('mysql:host=localhost;dbname=qcm;charset=utf8', 'root', 'root');
+                 $db = new PDO('mysql:host=172.17.0.2;dbname=qcm;charset=utf8', 'root', 'root');
                      $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                      $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                      $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -72,13 +72,13 @@ $app->post('/quiz/delete', function (Request $request, Response $response, $args
         if (empty($result)) {
             // SuccÃ¨s de la suppression du dossier
 
-            $db = new PDO('mysql:host=localhost;dbname=qcm;charset=utf8', 'root', 'root');
+            $db = new PDO('mysql:host=172.17.0.2;dbname=qcm;charset=utf8', 'root', 'root');
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
-            $stmt = $db->prepare("DELETE FROM list WHERE qcmName = 'QCM10'");
-            //$stmt->bindParam(':quiz_name', $quiz_name);
+            $stmt = $db->prepare("DELETE FROM list WHERE qcmName = :quiz_name");
+            $stmt->bindParam(':quiz_name', $quiz_name);
             $stmt->execute();
 
             $response = $response->withStatus(200);
