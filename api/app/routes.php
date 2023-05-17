@@ -234,4 +234,55 @@ $app->post('/quiz/delete', function (Request $request, Response $response, $args
         $response->getBody()->write(json_encode($data));
         return $response->withStatus(200);
     });
+    $app->post('/quiz/uploadlist', function (Request $request, Response $response, $args) {
+        $quiz_name = $request->getParsedBody()['name']; // nombre total de chunks
+        $directory = __DIR__ . "/../quiz_data/" . $quiz_name; // répertoire de destination de l'upload
+        $resumableIdentifier = $request->getParsedBody()['resumableIdentifier']; // identifiant de l'upload
+        $resumableFilename = $request->getParsedBody()['resumableFilename']; // nom du fichier
+        $resumableChunkNumber = $request->getParsedBody()['resumableChunkNumber']; // numéro de chunk
+        $resumableTotalChunks = $request->getParsedBody()['resumableTotalChunks']; // nombre total de chunks
+
+        $tmp_name = $directory . 'temp/' . $resumableIdentifier . '/' . $resumableChunkNumber;
+        $filePath = $directory . $resumableFilename;
+
+        // Vérifie si le fichier existe déjà
+        if (file_exists($filePath)) {
+            // Si oui, vérifie si le chunk a déjà été uploadé
+            if (file_exists($tmp_name)) {
+                $response->getBody()->write("Chunk already exists.");
+                return $response->withStatus(200);
+            }
+        }
+
+        // Crée le répertoire temporaire s'il n'existe pas
+        if (!file_exists($directory . 'temp/' . $resumableIdentifier)) {
+            mkdir($directory . 'temp/' . $resumableIdentifier, 0777, true);
+        }
+
+        // Enregistre le chunk sur le serveur
+        move_uploaded_file($_FILES['file']['tmp_name'], $tmp_name);
+
+        // Vérifie si tous les chunks ont été uploadés
+        if ($resumableChunkNumber == $resumableTotalChunks) {
+            // Réassemble les chunks en un seul fichier
+            for ($i = 1; $i <= $resumableTotalChunks; $i++) {
+                $chunk = $directory . 'temp/' . $resumableIdentifier . '/' . $i;
+                $buffer = file_get_contents($chunk);
+                file_put_contents($filePath, $buffer, FILE_APPEND);
+                unlink($chunk);
+            }
+
+            // Supprime le répertoire temporaire
+            rmdir($directory . 'temp/' . $resumableIdentifier);
+
+            // return json with success message and file path
+            $data = array('message' => 'Le fichier ' . $resumableFilename . ' a été uploadé avec succès', 'path' => $filePath);
+        } else {
+            // return json with success message
+            $data = array('message' => 'Le chunk ' . $resumableChunkNumber . ' a été uploadé avec succès');
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response->withStatus(200);
+    });
 };
