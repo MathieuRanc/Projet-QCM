@@ -359,7 +359,7 @@ export default {
       document.querySelector('section').classList.add('current');
     }
     this.resumable = new Resumable({
-      target: this.API_BASE_URL + '/upload',
+      target: this.API_BASE_URL + '/quiz/uploadlist',
       chunkSize: 1 * 1024 * 1024,
       simultaneousUploads: 1,
       testChunks: false,
