@@ -24,103 +24,84 @@ return function (App $app) {
     });
 
     $app->post('/quiz/create', function (Request $request, Response $response, $args) {
-        // Save from request body
+        // save from request body
         $data = $request->getParsedBody();
         $quiz_name = $data['name'];
-        
         try {
-            // Check database connection
-            $db = new PDO('mysql:host=172.17.0.2;dbname=qcm;charset=utf8', 'root', 'root');
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            
-            // Check for duplicate quiz_name
-            $stmt = $db->prepare("SELECT COUNT(*) FROM list WHERE qcmName = :quiz_name");
-            $stmt->bindParam(':quiz_name', $quiz_name);
-            $stmt->execute();
-            $count = $stmt->fetchColumn();
-            
-            if ($count > 0) {
-                $response = $response->withStatus(400);
-                $data = array('message' => 'Le nom du quiz existe déjà');
+            $result = exec("bash ".__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
+
+            if (str_starts_with($result, "Quiz")) {
+                // success
+                $response = $response->withStatus(200);
+                $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
+                // // create quiz in mysql db
+
+                 try {
+                 $db = new PDO('mysql:host=localhost;dbname=qcm;charset=utf8', 'root', 'root');
+                     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                     $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                     $stmt = $db->prepare("INSERT INTO list (qcmName) VALUES (:quiz_name)");
+                     $stmt->bindParam(':quiz_name', $quiz_name);
+                     $stmt->execute();
+                 } catch (PDOException $e) {
+                     $response = $response->withStatus(500);
+                     $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+                 }
             } else {
-                // Execute create_quiz.sh
-                $result = exec("bash ".__DIR__ . "/../bin/create_quiz.sh " . $quiz_name);
-    
-                if (str_starts_with($result, "Quiz")) {
-                    // Success
-                    $stmt = $db->prepare("INSERT INTO list (qcmName) VALUES (:quiz_name)");
-                    $stmt->bindParam(':quiz_name', $quiz_name);
-                    $stmt->execute();
-                    
-                    // Perform local actions
-                    
-                    $response = $response->withStatus(200);
-                    $data = array('message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès');
-                } else {
-                    // Error
-                    $response = $response->withStatus(304);
-                    $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name);
-                }
+                // erreur
+                $response = $response->withStatus(304);
+                $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name);
             }
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $response = $response->withStatus(500);
             $data = array('message' => 'Erreur lors de la création du quiz ' . $quiz_name . ' : ' . $e->getMessage());
         }
-        
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($data));
-        
         return $response;
     });
-    $app->post('/quiz/delete', function (Request $request, Response $response, $args) {
-        // Récupérer les données depuis le corps de la requête
-        $data = $request->getParsedBody();
-        $quiz_name = $data['name'];
-    
-        try {
-            // Vérifier la connexion à la base de données
-            $db = new PDO('mysql:host=172.17.0.2;dbname=qcm;charset=utf8', 'root', 'root');
+$app->post('/quiz/delete', function (Request $request, Response $response, $args) {
+    // RÃ©cupÃ©rer les donnÃ©es depuis le corps de la requÃªte
+    $data = $request->getParsedBody();
+    $quiz_name = $data['name'];
+
+    try {
+        $result = exec("rm -r " . __DIR__ . "/../quiz_data/" . $quiz_name);
+
+        if (empty($result)) {
+            // SuccÃ¨s de la suppression du dossier
+
+            $db = new PDO('mysql:host=localhost;dbname=qcm;charset=utf8', 'root', 'root');
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    
-            // Supprimer le dossier
-            $result = exec("rm -r " . __DIR__ . "/../quiz_data/" . $quiz_name);
-    
-            if (empty($result)) {
-                // Succès de la suppression du dossier
-    
-                // Supprimer la valeur dans la base de données
-                $stmt = $db->prepare("DELETE FROM list WHERE qcmName = :quiz_name");
-                $stmt->bindParam(':quiz_name', $quiz_name);
-                $stmt->execute();
-    
-                // Effectuer les actions locales
-    
-                $response = $response->withStatus(200);
-                $data = array('message' => 'Le quiz ' . $quiz_name . ' a été supprimé avec succès');
-            } else {
-                // Erreur lors de la suppression du dossier
-                $response = $response->withStatus(500);
-                $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name);
-            }
-        } catch (PDOException $e) {
-            // Erreur de la base de données
+
+            $stmt = $db->prepare("DELETE FROM list WHERE qcmName = 'QCM10'");
+            //$stmt->bindParam(':quiz_name', $quiz_name);
+            $stmt->execute();
+
+            $response = $response->withStatus(200);
+            $data = array('message' => 'Le quiz ' . $quiz_name . ' a Ã©tÃ© supprimÃ© avec succÃ¨s');
+        } else {
+            // Erreur lors de la suppression du dossier
             $response = $response->withStatus(500);
-            $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
-        } catch (Exception $e) {
-            // Autre erreur
-            $response = $response->withStatus(500);
-            $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+            $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name);
         }
-    
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode($data));
-        return $response;
-    });
-    
+    } catch (PDOException $e) {
+        // Erreur de la base de donnÃ©es
+        $response = $response->withStatus(500);
+        $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+    } catch (Exception $e) {
+        // Autre erreur
+        $response = $response->withStatus(500);
+        $data = array('message' => 'Erreur lors de la suppression du quiz ' . $quiz_name . ' : ' . $e->getMessage());
+    }
+
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(json_encode($data));
+    return $response;
+});
 
     $app->post('/quiz/omr', function (Request $request, Response $response, $args) {
         // save from request body
@@ -182,7 +163,8 @@ return function (App $app) {
     $app->post('/quiz/omr_errors_resolved', function (Request $request, Response $response, $args) {
         // save from request body
         $data = $request->getParsedBody();
-        $quiz_name = $data['name'];
+//$quiz_name = $data['name'];
+        $quiz_name = "test2";
         $result = exec("bash ".__DIR__ . "/../bin/omr_errors_resolved.sh " . $quiz_name);
         if (str_starts_with($result, "All done")) {
             // success
@@ -257,20 +239,15 @@ return function (App $app) {
         $quiz_name = $request->getParsedBody()['name']; // nombre total de chunks
         $directory = __DIR__ . "/../quiz_data/" . $quiz_name; // répertoire de destination de l'upload
         $resumableIdentifier = $request->getParsedBody()['resumableIdentifier']; // identifiant de l'upload
-        $resumableFilename = $request->getParsedBody()['resumableFilename']; // nom du fichier
         $resumableChunkNumber = $request->getParsedBody()['resumableChunkNumber']; // numéro de chunk
         $resumableTotalChunks = $request->getParsedBody()['resumableTotalChunks']; // nombre total de chunks
 
         $tmp_name = $directory . 'temp/' . $resumableIdentifier . '/' . $resumableChunkNumber;
-        $filePath = $directory . $resumableFilename;
+        $filePath = $directory . "list_id.csv";
 
-        // Vérifie si le fichier existe déjà
+        // Vérifie si le fichier existe déjà et si oui le supprimme
         if (file_exists($filePath)) {
-            // Si oui, vérifie si le chunk a déjà été uploadé
-            if (file_exists($tmp_name)) {
-                $response->getBody()->write("Chunk already exists.");
-                return $response->withStatus(200);
-            }
+            $result = exec("rm -r " . $filePath);
         }
 
         // Crée le répertoire temporaire s'il n'existe pas
@@ -295,7 +272,7 @@ return function (App $app) {
             rmdir($directory . 'temp/' . $resumableIdentifier);
 
             // return json with success message and file path
-            $data = array('message' => 'Le fichier ' . $resumableFilename . ' a été uploadé avec succès', 'path' => $filePath);
+            $data = array('message' => 'Le fichier list_id a été uploadé avec succès', 'path' => $filePath);
         } else {
             // return json with success message
             $data = array('message' => 'Le chunk ' . $resumableChunkNumber . ' a été uploadé avec succès');
