@@ -271,6 +271,16 @@ $app->post('/quiz/delete', function (Request $request, Response $response, $args
             // Supprime le répertoire temporaire
             rmdir($directory . 'temp/' . $resumableIdentifier);
 
+
+		// Convertit le fichier en JSON
+        	$jsonData = json_encode(file_get_contents($filePath));
+        	// Enregistre le fichier JSON dans la base de données
+       	$pdo = new PDO('mysql:host=localhost;dbname=qcm', 'root', 'root');
+       	$stmt = $pdo->prepare('UPDATE list SET list_student = :jsonData WHERE qcmName = :quiz_name');
+        	$stmt->execute(array('jsonData' => $jsonData, 'quiz_name' => $quiz_name));
+
+		
+
             // return json with success message and file path
             $data = array('message' => 'Le fichier list_id a été uploadé avec succès', 'path' => $filePath);
         } else {
