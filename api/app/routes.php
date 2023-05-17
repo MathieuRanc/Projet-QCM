@@ -128,11 +128,43 @@ $app->post('/quiz/delete', function (Request $request, Response $response, $args
         $quiz_name = $data['name'];
         $result = exec("bash ".__DIR__ . "/../bin/prepare_correction.sh " . $quiz_name);
         if (str_starts_with($result, "All done")) {
-            // success
-            $response = $response->withStatus(200);
-            $data = array('message' => 'Le quiz ' . $quiz_name . ' a été preparé pour la correction ');
+            // Retrieve the students_answers file
+            $students_answers_file = __DIR__ . "/../quiz_data/" . $quiz_name . "/" . $quiz_name . ".students_answers";
+            
+            if (file_exists($students_answers_file)) {
+                // Read the file content and convert it to JSON
+                $students_answers = file_get_contents($students_answers_file);
+                $students_answers_json = json_encode($students_answers);
+                
+                // Add the JSON data to the database
+                try {
+                    $conn = new PDO("mysql:host=localhost;dbname=qcm", "root", "root");
+                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    
+                    // Update the 'list' table with the students_answers JSON
+                    $stmt = $conn->prepare("UPDATE list SET students_answers = :students_answers WHERE qcmName = :quiz_name");
+                    $stmt->bindParam(':students_answers', $students_answers_json);
+                    $stmt->bindParam(':quiz_name', $quiz_name);
+                    $stmt->execute();
+                    
+                    // Close the database connection
+                    $conn = null;
+                    
+                    // Return success response
+                    $response = $response->withStatus(200);
+                    $data = array('message' => 'Le quiz ' . $quiz_name . ' a été préparé pour la correction et les réponses des étudiants ont été ajoutées à la base de données.');
+                } catch(PDOException $e) {
+                    // Error occurred while accessing the database
+                    $response = $response->withStatus(304);
+                    $data = array('message' => 'Erreur lors de la préparation de la correction ' . $quiz_name . '. Erreur de la base de données: ' . $e->getMessage());
+                }
+            } else {
+                // Error: students_answers file not found
+                $response = $response->withStatus(304);
+                $data = array('message' => 'Erreur lors de la préparation de la correction ' . $quiz_name . '. Fichier students_answers non trouvé.');
+            }
         } else {
-            // erreur
+            // Error occurred while preparing the correction
             $response = $response->withStatus(304);
             $data = array('message' => 'Erreur lors de la préparation de la correction ' . $quiz_name);
         }
