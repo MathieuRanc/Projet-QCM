@@ -341,4 +341,61 @@ return function (App $app) {
         $response->getBody()->write(json_encode($data));
         return $response->withStatus(200);
     });
+
+    $app->post('/quiz/uploadcorrect', function (Request $request, Response $response, $args) {
+        $quiz_name = $request->getParsedBody()['name']; // nombre total de chunks
+        $directory = __DIR__ . "/../quiz_data/" . $quiz_name; // répertoire de destination de l'upload
+        $resumableIdentifier = $request->getParsedBody()['resumableIdentifier']; // identifiant de l'upload
+        $resumableChunkNumber = $request->getParsedBody()['resumableChunkNumber']; // numéro de chunk
+        $resumableTotalChunks = $request->getParsedBody()['resumableTotalChunks']; // nombre total de chunks
+
+        $tmp_name = $directory . 'temp/' . $resumableIdentifier . '/' . $resumableChunkNumber;
+        $filePath = $directory . "correction.marking";
+
+        // Vérifie si le fichier existe déjà et si oui le supprimme
+        if (file_exists($filePath)) {
+            $result = exec("rm -r " . $filePath);
+        }
+
+        // Crée le répertoire temporaire s'il n'existe pas
+        if (!file_exists($directory . 'temp/' . $resumableIdentifier)) {
+            mkdir($directory . 'temp/' . $resumableIdentifier, 0777, true);
+        }
+
+        // Enregistre le chunk sur le serveur
+        move_uploaded_file($_FILES['file']['tmp_name'], $tmp_name);
+
+        // Vérifie si tous les chunks ont été uploadés
+        if ($resumableChunkNumber == $resumableTotalChunks) {
+            // Réassemble les chunks en un seul fichier
+            for ($i = 1; $i <= $resumableTotalChunks; $i++) {
+                $chunk = $directory . 'temp/' . $resumableIdentifier . '/' . $i;
+                $buffer = file_get_contents($chunk);
+                file_put_contents($filePath, $buffer, FILE_APPEND);
+                unlink($chunk);
+            }
+
+            // Supprime le répertoire temporaire
+            rmdir($directory . 'temp/' . $resumableIdentifier);
+
+
+		// Convertit le fichier en JSON
+        	$jsonData = json_encode(file_get_contents($filePath));
+        	// Enregistre le fichier JSON dans la base de données
+       	$pdo = new PDO('mysql:host=localhost;dbname=qcm', 'root', 'root');
+       	$stmt = $pdo->prepare('UPDATE list SET list_student = :jsonData WHERE qcmName = :quiz_name');
+        	$stmt->execute(array('jsonData' => $jsonData, 'quiz_name' => $quiz_name));
+
+		
+
+            // return json with success message and file path
+            $data = array('message' => 'Le fichier correction.marking a été uploadé avec succès', 'path' => $filePath);
+        } else {
+            // return json with success message
+            $data = array('message' => 'Le chunk ' . $resumableChunkNumber . ' a été uploadé avec succès');
+        }
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode($data));
+        return $response->withStatus(200);
+    });
 };
