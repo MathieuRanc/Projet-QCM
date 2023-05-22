@@ -222,7 +222,7 @@
     </section>
     <hr />
     <section>
-      <span style="position: absolute; left: -9999px;">7</span>
+      <span style="position: absolute; left: -9999px">7</span>
       <div>
         <div class="validation">
           <button class="outline" @click="cancelStep">
@@ -283,7 +283,7 @@ export default {
       // delete quiz
       // make request to delete quiz on server
       this.$axios
-        .delete(`${this.API_BASE_URL}/quiz/${this.$route.params.id}`)
+        .delete(`${this.API_BASE_URL}/quiz/delete`, { data: { name: this.quizName } })
         .then((response) => {
           db.deleteRow('quiz', { id: parseInt(this.$route.params.id) }, (succ, msg) => {
             if (succ) {
@@ -291,6 +291,7 @@ export default {
             }
           });
           console.log(response);
+          this.$router.push('/');
         })
         .catch((error) => {
           console.log(error);
