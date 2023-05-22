@@ -1,0 +1,113 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/create": {
+            "post": {
+                "operationId": "9adf3005839b6b56b78980ce4eb84b9e",
+                "responses": {
+                    "200": {
+                        "description": "Quiz créé avec succès"
+                    },
+                    "400": {
+                        "description": "Le nom du quiz existe déjà"
+                    },
+                    "304": {
+                        "description": "Erreur lors de la création du quiz"
+                    }
+                }
+            }
+        },
+        "/delete": {
+            "post": {
+                "operationId": "6151cf7e523abbf0a6c42ee948538118",
+                "responses": {
+                    "200": {
+                        "description": "Quiz supprimé avec succès"
+                    },
+                    "400": {
+                        "description": "Le nom du quiz n'existe pas"
+                    }
+                }
+            }
+        },
+        "/correct": {
+            "post": {
+                "operationId": "43f32f8abec07d9c061d089f662a678f",
+                "responses": {
+                    "200": {
+                        "description": "Quiz corrigé"
+                    },
+                    "304": {
+                        "description": "Erreur lors de la préparation de la correction ou lors de la correction"
+                    }
+                }
+            }
+        },
+        "/omr_errors_resolved": {
+            "post": {
+                "operationId": "6a12348c4020caf6ba0e360ec85772f6",
+                "responses": {
+                    "200": {
+                        "description": "Execution du script OMR errors réussie sur le quizz"
+                    },
+                    "304": {
+                        "description": "Erreur lors du script OMR errors"
+                    }
+                }
+            }
+        },
+        "/upload_copies": {
+            "post": {
+                "operationId": "5ad399648d6d25f97c6c5c741d0cb7b4",
+                "responses": {
+                    "200": {
+                        "description": "Fichier de correction uploadé avec succès"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'upload du fichier de correction"
+                    }
+                }
+            }
+        },
+        "/upload_correction": {
+            "post": {
+                "operationId": "8b74e23bf68e0250b2d0607a39c43ed4",
+                "responses": {
+                    "200": {
+                        "description": "Fichier de correction uploadé avec succès"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'upload du fichier de correction"
+                    }
+                }
+            }
+        },
+        "/upload_list": {
+            "post": {
+                "operationId": "8392e07e6324e3060dd6cfcca9907aaf",
+                "responses": {
+                    "200": {
+                        "description": "PDF généré"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'upload du fichier de correction"
+                    }
+                }
+            }
+        },
+        "/check_correction": {
+            "get": {
+                "operationId": "ef574a1eafa7550924568e1967179422",
+                "responses": {
+                    "200": {
+                        "description": "Liste des quiz"
+                    }
+                }
+            }
+        }
+    }
+}
