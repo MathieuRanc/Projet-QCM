@@ -283,14 +283,13 @@ export default {
       // delete quiz
       // make request to delete quiz on server
       this.$axios
-        .delete(`${this.API_BASE_URL}/quiz/delete`, { data: { name: this.quizName } })
+        .delete(`${this.API_BASE_URL}/quiz`, { data: { name: this.quizName } })
         .then((response) => {
           db.deleteRow('quiz', { id: parseInt(this.$route.params.id) }, (succ, msg) => {
             if (succ) {
               this.$router.push('/quiz');
             }
           });
-          console.log(response);
           this.$router.push('/');
         })
         .catch((error) => {
@@ -316,7 +315,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           document.getElementById('firstValidate').click();
         })
         .catch((error) => {
@@ -340,7 +338,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           document.getElementById('downloadCopies').click();
         })
         .catch((error) => {
@@ -354,7 +351,6 @@ export default {
       this.$axios
         .post(`${this.API_BASE_URL}/quiz/correct`, formData)
         .then((response) => {
-          console.log(response);
           document.getElementById('fourthValidate').click();
         })
         .catch((error) => {
@@ -368,7 +364,6 @@ export default {
       this.$axios
         .post(`${this.API_BASE_URL}/quiz/check_correction`, formData)
         .then((response) => {
-          console.log(response);
           document.getElementById('fiveValidate').click();
         })
         .catch((error) => {
@@ -376,9 +371,7 @@ export default {
         });
     },
     downloadResults() {},
-    handleFilePondInit() {
-      console.log('FilePond has initialized');
-    },
+    handleFilePondInit() {},
     validateStep(event) {
       // add current class to next tag section
       // remove current class from current tag section
@@ -399,7 +392,7 @@ export default {
           },
           (succ, msg) => {
             if (succ) {
-              console.log('update success', this.quiz.step);
+              console.log('update success');
             } else {
               console.log('update failed');
             }

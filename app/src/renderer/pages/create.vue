@@ -60,7 +60,7 @@ export default {
       console.log(quiz);
 
       // request localhot:8000/quiz/create with param name
-      await this.$axios.$post('http://localhost:8000/quiz/create', {
+      await this.$axios.$post('http://localhost:8000/quiz', {
         name: quiz.promo + '_' + quiz.subject + '_' + quiz.type + '_' + quiz.date,
       });
 

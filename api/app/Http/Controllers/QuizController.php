@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class QuizController extends Controller
 {
     /**
-     * @OA\Info(title="My API", version="0.1")
+     * @OA\Info(title="API Documentation", version="0.1")
      */
     public function index()
     {
@@ -20,10 +20,17 @@ class QuizController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/create",
+     *     path="/quiz",
      *     @OA\Response(response="200", description="Quiz créé avec succès"),
      *     @OA\Response(response="400", description="Le nom du quiz existe déjà"),
-     *     @OA\Response(response="304", description="Erreur lors de la création du quiz")
+     *     @OA\Response(response="500", description="Erreur lors de la création du quiz"),
+     *     @OA\RequestBody(
+     *       required=true,
+     *       @OA\JsonContent(
+     *         required={"name"},
+     *         @OA\Property(property="name", type="string", description="Le nom du quiz à créer"),
+     *       ),
+     *     )
      * )
      */
     public function create(Request $request)
@@ -52,10 +59,16 @@ class QuizController extends Controller
     }
 
     /**
-     * @OA\Post(
-     *     path="/delete",
+     * @OA\Delete(
+     *     path="/quiz",
      *     @OA\Response(response="200", description="Quiz supprimé avec succès"),
-     *     @OA\Response(response="400", description="Le nom du quiz n'existe pas")
+     *     @OA\Response(response="400", description="Le nom du quiz n'existe pas"),
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     )
      * )
      */
     public function delete(Request $request)
@@ -77,8 +90,17 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/correct",
+     *     tags={"corrections"},
      *     @OA\Response(response="200", description="Quiz corrigé"),
-     *     @OA\Response(response="304", description="Erreur lors de la préparation de la correction ou lors de la correction")
+     *     @OA\Response(response="304", description="Erreur lors de la préparation de la correction ou lors de la correction"),
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path", 
+     *       required=true,
+     *       @OA\Schema(
+     *         type="string"
+     *         )
+     *       )
      * )
      */
     public function correct(Request $request)
@@ -125,8 +147,17 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/omr_errors_resolved",
+     *     tags={"corrections"},
      *     @OA\Response(response="200", description="Execution du script OMR errors réussie sur le quizz"),
-     *     @OA\Response(response="304", description="Erreur lors du script OMR errors")
+     *     @OA\Response(response="304", description="Erreur lors du script OMR errors"),
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path", 
+     *       required=true,
+     *       @OA\Schema(
+     *         type="string"
+     *         )
+     *       )
      * )
      */
     public function omr_errors_resolved(Request $request)
@@ -144,8 +175,25 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/upload_copies",
+     *     tags={"corrections"},
      *     @OA\Response(response="200", description="Fichier de correction uploadé avec succès"),
-     *     @OA\Response(response="500", description="Erreur lors de l'upload du fichier de correction")
+     *     @OA\Response(response="500", description="Erreur lors de l'upload du fichier de correction"),
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path", 
+     *       required=true,
+     *       @OA\Schema(
+     *         type="string"
+     *         )
+     *       ),
+     *       @OA\Parameter(
+     *         name="file",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="file"
+     *         )
+     *       )
      * )
      */
     public function upload_copies(Request $request)
@@ -181,8 +229,41 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/upload_correction",
-     *     @OA\Response(response="200", description="Fichier de correction uploadé avec succès"),
-     *     @OA\Response(response="500", description="Erreur lors de l'upload du fichier de correction")
+     *     tags={"corrections"},
+     *     summary="Upload de la correction du quiz",
+     *     operationId="uploadCorrection",
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path",
+     *       description="Nom du quiz",
+     *       required=true,
+     *       @OA\Schema(
+     *         type="string"
+     *       )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Fichier de correction à uploader",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     description="Fichier à uploader",
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary",
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Fichier de correction uploadé avec succès"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur lors de l'upload du fichier de correction"
+     *     )
      * )
      */
     public function upload_correction(Request $request)
@@ -235,8 +316,41 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/upload_list",
-     *     @OA\Response(response="200", description="PDF généré"),
-     *     @OA\Response(response="500", description="Erreur lors de l'upload du fichier de correction")
+     *     tags={"lists"},
+     *     summary="Upload de la liste des élèves du quiz",
+     *     operationId="uploadList",
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path",
+     *       description="Nom du quiz",
+     *       required=true,
+     *       @OA\Schema(
+     *         type="string"
+     *       )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Fichier de liste à uploader",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     description="Fichier à uploader",
+     *                     property="file",
+     *                     type="string",
+     *                     format="binary",
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Fichier de liste uploadé avec succès"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Erreur lors de l'upload du fichier de liste"
+     *     )
      * )
      */
     function upload_list(Request $request)
@@ -275,7 +389,17 @@ class QuizController extends Controller
     /**
      * @OA\Get(
      *     path="/check_correction",
-     *     @OA\Response(response="200", description="Liste des quiz")
+     *     @OA\Response(response="200", description="Liste des quiz"),
+     *     @OA\Response(response="500", description="Erreur lors de la récupération de la liste des quiz"),
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path", 
+     *       required=true,
+     *       @OA\Schema(
+     *         type="string"
+     *       )
+     *     )
+     *   
      * )
      */
     public function check_correction()
