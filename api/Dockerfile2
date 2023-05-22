@@ -2,7 +2,7 @@ FROM mysql:debian
 
 ENV MYSQL_ROOT_PASSWORD=root
 
-COPY ./mysql_init.sql /docker-entrypoint-initdb.d/
+COPY ./init.sql /docker-entrypoint-initdb.d/
 
 
 ADD ./ /api/
