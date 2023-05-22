@@ -21,7 +21,7 @@ services:
       - db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: laravel
+      MYSQL_DATABASE: qcm
       MYSQL_USER: laravel
       MYSQL_PASSWORD: password
 volumes:

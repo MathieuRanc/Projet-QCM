@@ -1,5 +1,6 @@
 # Choisir l'image de base
-FROM mysql:latest
+FROM mysql:8
+
 
 # Copiez le script SQL dans le conteneur
 COPY init.sql /docker-entrypoint-initdb.d/
