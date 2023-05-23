@@ -14,6 +14,7 @@ os.chdir(script_dir)
 # Ouverture du fichier CSV
 with open("liste_id.csv", "r") as f:
     data = np.loadtxt(f, dtype=str, delimiter=";", skiprows=1)
+    print(data)
 
 # Coordinates for each rectangle
 coords_1 = [577, 692, 812, 935, 1048, 1524, 1635, 1760, 1880, 1996]
@@ -23,9 +24,10 @@ rect_size = [30, 30]  # width and height
 print('Traitement en cours...')
 
 for Nstudent, (identifiant, name, last_name, Date, examen) in enumerate(tqdm(data, ncols=70)):
+    print(name)
     if Nstudent >= len(data[:, 0]):
         break
-
+#
     list_of_integers = list(map(int, identifiant))
 
     # Copy the original.jpg to out.jpg
@@ -43,7 +45,7 @@ for Nstudent, (identifiant, name, last_name, Date, examen) in enumerate(tqdm(dat
         subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Inscription des noms
-    command = ['convert', 'out.jpg', '-font', 'calibri', '-pointsize', '40', '-draw', f'text 577,720 {name}', '-draw', f'text 577,775 {last_name}', f'{Nstudent}.jpg']
+    command = ['convert', 'out.jpg', '-font', 'calibri', '-pointsize', '40', '-draw', f'text 577,720 "{name}"', '-draw', f'text 577,775 {last_name}', f'{Nstudent}.jpg']
     subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 Date = data[0,3]
