@@ -9,12 +9,17 @@ RUN apt-get update && apt-get install -y \
   python3-pip \
   libmagickwand-dev \
   imagemagick \
+  curl \
+  unzip \
   --no-install-recommends \
   && docker-php-ext-enable opcache \
   && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install pdo_mysql -j$(nproc) gd \
+  && docker-php-ext-install pdo_mysql -j$(nproc) gd curl \
   && apt-get autoclean -y \
   && rm -rf /var/lib/apt/lists/*
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Update ImageMagick policy
 RUN sed -i '/PDF/s/none/read|write/' /etc/ImageMagick-6/policy.xml
@@ -40,3 +45,12 @@ COPY bin/requirements.txt /tmp/requirements.txt
 
 # Install the Python dependencies
 RUN pip3 install -r /tmp/requirements.txt
+
+# Set the working directory in the container
+WORKDIR /var/www
+
+# Copy the application files to the Docker container
+COPY . .
+
+# Install the PHP dependencies
+RUN composer install
