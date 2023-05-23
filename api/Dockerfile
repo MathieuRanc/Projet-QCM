@@ -59,4 +59,7 @@ RUN composer install
 # Set permission on storage folder
 RUN chmod -R 755 storage
 RUN chmod 755 ./.env
+RUN sed -i 's/\r//g' bin/*.sh
 # RUN php artisan key:generate
+
+RUN sed -i '1a composer install --working-dir=/var/www&' /usr/local/bin/docker-php-entrypoint \
