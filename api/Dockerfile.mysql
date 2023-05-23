@@ -1,8 +1,7 @@
 # Choisir l'image de base
 FROM mysql:8
 
-
-# Copiez le script SQL dans le conteneur
+# Copier le script SQL dans le conteneur
 COPY init.sql /docker-entrypoint-initdb.d/
 
 # Configurer les variables d'environnement pour MySQL
