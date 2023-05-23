@@ -45,7 +45,7 @@ for Nstudent, (identifiant, name, last_name, Date, examen) in enumerate(tqdm(dat
         subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     # Inscription des noms
-    command = ['convert', 'out.jpg', '-font', 'calibri', '-pointsize', '40', '-draw', f'text 577,720 "{name}"', '-draw', f'text 577,775 {last_name}', f'{Nstudent}.jpg']
+    command = ['convert', 'out.jpg', '-font', 'calibri', '-pointsize', '40', '-draw', f'text 577,720 "{name}"', '-draw', f'text 577,775 "{last_name}"', f'{Nstudent}.jpg']
     subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 Date = data[0,3]
