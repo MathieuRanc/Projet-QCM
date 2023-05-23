@@ -8,7 +8,7 @@ module.exports = {
   ssr: false,
   target: 'static',
   head: {
-    title: 'electron-nuxt',
+    title: 'QCM App',
     meta: [{ charset: 'utf-8' }],
   },
   loading: false,
@@ -20,7 +20,7 @@ module.exports = {
   buildModules: [],
   modules: ['@nuxtjs/axios'],
   runtimeConfig: {
-    public: { apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:8000' },
+    public: { apiBaseUrl: process.env.API_BASE_URL || 'http://localhost' },
   },
 
   // router: {

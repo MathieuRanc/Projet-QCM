@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       elements: [],
+      API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost',
     };
   },
   methods: {
@@ -60,7 +61,7 @@ export default {
       console.log(quiz);
 
       // request localhot:8000/quiz/create with param name
-      await this.$axios.$post('http://localhost:8000/quiz', {
+      await this.$axios.$post(this.API_BASE_URL + '/quiz', {
         name: quiz.promo + '_' + quiz.subject + '_' + quiz.type + '_' + quiz.date,
       });
 

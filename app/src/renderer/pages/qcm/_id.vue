@@ -127,7 +127,7 @@
           id="foo"
           ref="el"
           :options="{
-            url: 'http://localhost:8000/quiz/upload_copies?name=' + this.quizName,
+            url: 'http://localhost/quiz/upload_copies?name=' + this.quizName,
           }"
           :destroyDropzone="true"
         ></dropzone>
@@ -250,7 +250,7 @@ export default {
       copies: 0,
       myFiles: ['tutoriel.jpg'],
       options: {},
-      API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost:8000',
+      API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost',
     };
   },
   components: {

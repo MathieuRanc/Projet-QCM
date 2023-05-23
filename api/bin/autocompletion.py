@@ -63,10 +63,10 @@ jpg_files = [f for f in os.listdir() if re.match(r'\d.*\.jpg$', f)]
 
 # If there are any matching files, convert them
 if jpg_files:
-    subprocess.run(['convert'] + jpg_files + ['sortie.pdf'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(['convert'] + jpg_files + ['sortie.jpg'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 # supression des fichiers temporaires
-os.system('rm out.jpg')
-os.system('rm [0-9]*.jpg')
+# os.system('rm out.jpg')
+# os.system('rm [0-9]*.jpg')
 
 print('\nLe traitement est terminé !')
