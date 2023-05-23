@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class QuizController extends Controller
 {
     /**
-     * @OA\Info(title="API Documentation", version="0.1")
+     * @OA\Info(title="API Documentation", version="0.1", description="Cette documentation Swagger fournit une interface pour interagir avec une API de gestion de quiz. L'API offre plusieurs fonctionnalités, comme la création et la suppression de quiz, la correction des réponses des quiz, la résolution des erreurs OMR (Optical Mark Recognition), et le téléchargement de fichiers de correction et de listes d'étudiants. En outre, elle permet également de vérifier les corrections des quiz. L'API utilise principalement les méthodes HTTP POST et DELETE pour effectuer ces opérations. Chaque opération est bien définie avec des réponses attendues en cas de succès ou d'échec. La documentation est détaillée, fournissant des informations sur les types de données attendus, les réponses HTTP possibles et d'autres détails pertinents pour chaque opération.")
      */
     public function index()
     {
@@ -21,6 +21,7 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/quiz",
+     *     summary="Crée un quiz",
      *     @OA\Response(response="200", description="Quiz créé avec succès"),
      *     @OA\Response(response="400", description="Le nom du quiz existe déjà"),
      *     @OA\Response(response="500", description="Erreur lors de la création du quiz"),
@@ -61,6 +62,7 @@ class QuizController extends Controller
     /**
      * @OA\Delete(
      *     path="/quiz",
+     *     summary="Supprimer un quiz",
      *     @OA\Response(response="200", description="Quiz supprimé avec succès"),
      *     @OA\Response(response="400", description="Le nom du quiz n'existe pas"),
      *     @OA\Parameter(
@@ -90,6 +92,7 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/correct",
+     *     summary="Lancer la correction des quiz",
      *     tags={"corrections"},
      *     @OA\Response(response="200", description="Quiz corrigé"),
      *     @OA\Response(response="304", description="Erreur lors de la préparation de la correction ou lors de la correction"),
@@ -147,6 +150,7 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/omr_errors_resolved",
+     *     summary="Résoudre les erreurs de l'omr",
      *     tags={"corrections"},
      *     @OA\Response(response="200", description="Execution du script OMR errors réussie sur le quizz"),
      *     @OA\Response(response="304", description="Erreur lors du script OMR errors"),
@@ -175,6 +179,7 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/upload_copies",
+     *     summary="Upload les copies",
      *     tags={"corrections"},
      *     @OA\Response(response="200", description="Fichier de correction uploadé avec succès"),
      *     @OA\Response(response="500", description="Erreur lors de l'upload du fichier de correction"),
@@ -229,6 +234,7 @@ class QuizController extends Controller
     /**
      * @OA\Post(
      *     path="/upload_correction",
+     *     summary="Upload la correction du quiz",
      *     tags={"corrections"},
      *     summary="Upload de la correction du quiz",
      *     operationId="uploadCorrection",
@@ -389,6 +395,7 @@ class QuizController extends Controller
     /**
      * @OA\Get(
      *     path="/check_correction",
+     *     summary="Vérifier les corrections",
      *     @OA\Response(response="200", description="Liste des quiz"),
      *     @OA\Response(response="500", description="Erreur lors de la récupération de la liste des quiz"),
      *     @OA\Parameter(
