@@ -1,19 +1,23 @@
 FROM php:8-apache
 
-RUN apt-get update && apt-get install -y  \
+RUN apt-get update && apt-get install -y \
   libfreetype6-dev \
   libjpeg-dev \
   libpng-dev \
   libwebp-dev \
   python3 \
   python3-pip \
+  libmagickwand-dev \
   imagemagick \
   --no-install-recommends \
   && docker-php-ext-enable opcache \
   && docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-ext-install pdo_mysql -j$(nproc) gd \
   && apt-get autoclean -y \
-  && rm -rf /var/lib/apt/lists/* 
+  && rm -rf /var/lib/apt/lists/*
+
+# Update ImageMagick policy
+RUN sed -i '/PDF/s/none/read|write/' /etc/ImageMagick-6/policy.xml
 
 # Update apache conf to point to application public directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/public
