@@ -21,40 +21,22 @@ class QuizController extends Controller
     /**
      * @OA\Get(
      *     path="/quiz",
-     *     summary="Récupère un quiz spécifique ou tous les quiz",
+     *     summary="Récupère la liste des quiz créés",
      *     @OA\Response(response="200", description="Récupération réussie"),
-     *     @OA\Response(response="404", description="Le quiz demandé n'a pas été trouvé"),
-     *     @OA\RequestBody(
-     *       required=false,
-     *       @OA\JsonContent(
-     *         required={"name"},
-     *         @OA\Property(property="name", type="string", description="Le nom du quiz à récupérer"),
-     *       ),
-     *     )
+     *     @OA\Response(response="404", description="Aucun quiz n'a été trouvé"),
      * )
      */
-    public function getQuiz(Request $request)
+    public function list()
     {
-        $quiz_name = $request->input('name');
+        $quizzes = Quiz::all();
 
-        if ($quiz_name) {
-            $quiz = Quiz::where('qcmName', $quiz_name)->first();
-
-            if ($quiz) {
-                return response()->json(['quiz' => $quiz], 200);
-            } else {
-                return response()->json(['message' => 'Le quiz demandé n\'a pas été trouvé'], 404);
-            }
+        if ($quizzes->isEmpty()) {
+            return response()->json(['message' => 'Aucun quiz n\'a été trouvé'], 404);
         } else {
-            $quizzes = Quiz::all();
-
-            if ($quizzes->isEmpty()) {
-                return response()->json(['message' => 'Aucun quiz n\'a été trouvé'], 404);
-            } else {
-                return response()->json(['quizzes' => $quizzes], 200);
-            }
+            return response()->json(['quizzes' => $quizzes], 200);
         }
     }
+
 
 
     /**
