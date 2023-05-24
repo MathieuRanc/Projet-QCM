@@ -23,7 +23,7 @@ LOGINS=$(awk 'BEGIN {FS=";" } { print $1}' ${QUIZ_DIR}/correction/${FIRST_QUIZ_P
 # Pour chaque nom d'utilisateur, exécute un script Python pour récupérer le nom complet de l'étudiant correspondant
 for LOGIN in ${LOGINS}; do
     # Exécute le script Python bdd.py avec le nom d'utilisateur LOGIN et stocke le résultat dans la variable NAME
-    NAME=$(python ${SCRIPT_DIR}/bdd.py ${LOGIN})
+    NAME=$(python3 ${SCRIPT_DIR}/bdd.py ${LOGIN})
 
     # Si le script Python n'a pas renvoyé de nom, attribue les valeurs "UNKNOWN_NAME;UNKNOWN_FIRST_NAME" à NAME
     if [ "${NAME}" = "" ]; then
