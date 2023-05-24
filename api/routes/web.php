@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuizController;
 
 Route::group(['prefix' => 'quiz'], function () {
+    Route::get('/', [QuizController::class, 'getQuiz']);
     Route::post('/', [QuizController::class, 'create']);
     Route::delete('/', [QuizController::class, 'delete']);
     Route::post('/correct', [QuizController::class, 'correct']);

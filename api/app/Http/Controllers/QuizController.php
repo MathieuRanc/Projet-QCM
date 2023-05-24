@@ -19,6 +19,27 @@ class QuizController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/quiz",
+     *     summary="Récupère la liste des quiz créés",
+     *     @OA\Response(response="200", description="Récupération réussie"),
+     *     @OA\Response(response="404", description="Aucun quiz n'a été trouvé"),
+     * )
+     */
+    public function list()
+    {
+        $quizzes = Quiz::all();
+
+        if ($quizzes->isEmpty()) {
+            return response()->json(['message' => 'Aucun quiz n\'a été trouvé'], 404);
+        } else {
+            return response()->json(['quizzes' => $quizzes], 200);
+        }
+    }
+
+
+
+    /**
      * @OA\Post(
      *     path="/quiz",
      *     summary="Crée un quiz",
@@ -92,7 +113,7 @@ class QuizController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/correct",
+     *     path="/quiz/correct",
      *     summary="Lancer la correction des quiz",
      *     tags={"corrections"},
      *     @OA\Response(response="200", description="Quiz corrigé"),
@@ -150,7 +171,7 @@ class QuizController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/omr_errors_resolved",
+     *     path="/quiz/omr_errors_resolved",
      *     summary="Résoudre les erreurs de l'omr",
      *     tags={"corrections"},
      *     @OA\Response(response="200", description="Execution du script OMR errors réussie sur le quizz"),
@@ -179,7 +200,7 @@ class QuizController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/upload_copies",
+     *     path="/quiz/upload_copies",
      *     summary="Upload les copies",
      *     tags={"corrections"},
      *     @OA\Response(response="200", description="Fichier de correction uploadé avec succès"),
@@ -234,7 +255,7 @@ class QuizController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/upload_correction",
+     *     path="/quiz/upload_correction",
      *     summary="Upload la correction du quiz",
      *     tags={"corrections"},
      *     summary="Upload de la correction du quiz",
@@ -322,7 +343,7 @@ class QuizController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/upload_list",
+     *     path="/quiz/upload_list",
      *     tags={"lists"},
      *     summary="Upload de la liste des élèves du quiz",
      *     operationId="uploadList",
@@ -395,7 +416,7 @@ class QuizController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/check_correction",
+     *     path="/quiz/check_correction",
      *     summary="Vérifier les corrections",
      *     @OA\Response(response="200", description="Liste des quiz"),
      *     @OA\Response(response="500", description="Erreur lors de la récupération de la liste des quiz"),

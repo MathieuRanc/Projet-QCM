@@ -61,5 +61,8 @@ RUN chmod -R 755 storage
 RUN chmod 755 ./.env
 RUN sed -i 's/\r//g' bin/*.sh
 
+RUN apt update \
+&& apt install libsdl-gfx1.2-dev default-jdk libmagick++-dev libsdl-image1.2-dev -y
+
 RUN sed -i '1a composer install --working-dir=/var/www&' /usr/local/bin/docker-php-entrypoint
 RUN sed -i '1a sed -i "s/\r$//" bin/*.sh' /usr/local/bin/docker-php-entrypoint
