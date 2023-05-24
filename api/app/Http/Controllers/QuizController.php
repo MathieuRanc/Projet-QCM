@@ -58,13 +58,14 @@ class QuizController extends Controller
     public function create(Request $request)
     {
         $quiz_name = $request->input('name');
+        $nb_question = $request->input('nbQuestion');
         $existingQuiz = Quiz::where('qcmName', $quiz_name)->first();
 
         if ($existingQuiz) {
             return response()->json(['message' => 'Le nom du quiz existe déjà'], 400);
         } else {
             // Execute the bash script here
-            $scriptOutput = exec("bash ../bin/create_quiz.sh " . escapeshellarg($quiz_name));
+            $scriptOutput = exec("bash ../bin/create_quiz.sh " . escapeshellarg($quiz_name) . " " .escapeshellarg($nb_question));
 
             // display the output of the script
             error_log($scriptOutput);
@@ -130,9 +131,9 @@ class QuizController extends Controller
     public function correct(Request $request)
     {
         $quiz_name = $request->input('name');
-        $result = shell_exec("bash ../bin/omr.sh " . escapeshellarg($quiz_name));
 
-        $quiz_name = $request->input('name');
+        $result = shell_exec("bash ../bin/omr.sh " . escapeshellarg($quiz_name));
+        $result = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
         $result = shell_exec("bash ../bin/prepare_correction.sh " . escapeshellarg($quiz_name));
 
         if (str_starts_with($result, "All done")) {

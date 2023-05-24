@@ -17,12 +17,7 @@ mkdir ${QUIZ_DIR}/correction_errors/
 mkdir ${QUIZ_DIR}/processes/
 echo "None" > ${QUIZ_DIR}/processes/current_process
 
-echo "# Ce fichier doit contenir la répartition des questions 
-# en fonction des matières.
-# On décrit une matière par ligne sous la forme :
-#      nom_matiere:question_debut:question_fin
-
-" > ${QUIZ_DIR}/quiz.conf
+echo "qcm:1:$2" > ${QUIZ_DIR}/quiz.conf
 
 echo "# Fichier de bareme.
 # Chaque ligne décrit une question sous la forme :
