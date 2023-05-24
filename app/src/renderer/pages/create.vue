@@ -31,6 +31,10 @@
           <span>Date d'examen</span>
           <input type="date" name="date" id="date" :value="new Date().toISOString().substring(0, 10)"
         /></label>
+        <label for="nbQuestion">
+          <span>Date d'examen</span>
+          <input type="number" name="nbQuestion" id="nbQuestion" value="20"
+        /></label>
       </div>
       <input class="button" type="submit" value="Créer le QCM" />
     </form>
@@ -54,6 +58,7 @@ export default {
         subject: event.target.subject.value,
         type: event.target.type.value,
         date: event.target.date.value,
+        nbQuestions: event.target.nbQuestion.value,
         step: 0,
         createdAt: new Date().toISOString(),
         modifiedAt: new Date().toISOString(),
@@ -63,6 +68,7 @@ export default {
       // request localhot:8000/quiz/create with param name
       await this.$axios.$post(this.API_BASE_URL + '/quiz', {
         name: quiz.promo + '_' + quiz.subject + '_' + quiz.type + '_' + quiz.date,
+        nbQuestion: quiz.nbQuestions,
       });
 
       db.insertTableContent('quiz', quiz, (succ, msg) => {
