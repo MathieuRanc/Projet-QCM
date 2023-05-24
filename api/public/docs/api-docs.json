@@ -2,11 +2,44 @@
     "openapi": "3.0.0",
     "info": {
         "title": "API Documentation",
+        "description": "Cette documentation Swagger fournit une interface pour interagir avec une API de gestion de quiz. L'API offre plusieurs fonctionnalités, comme la création et la suppression de quiz, la correction des réponses des quiz, la résolution des erreurs OMR (Optical Mark Recognition), et le téléchargement de fichiers de correction et de listes d'étudiants. En outre, elle permet également de vérifier les corrections des quiz. L'API utilise principalement les méthodes HTTP POST et DELETE pour effectuer ces opérations. Chaque opération est bien définie avec des réponses attendues en cas de succès ou d'échec. La documentation est détaillée, fournissant des informations sur les types de données attendus, les réponses HTTP possibles et d'autres détails pertinents pour chaque opération.",
         "version": "0.1"
     },
     "paths": {
         "/quiz": {
+            "get": {
+                "summary": "Récupère un quiz spécifique ou tous les quiz",
+                "operationId": "9f1052a872b8a4b6e915263bc4c738bd",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Le nom du quiz à récupérer",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Récupération réussie"
+                    },
+                    "404": {
+                        "description": "Le quiz demandé n'a pas été trouvé"
+                    }
+                }
+            },
             "post": {
+                "summary": "Crée un quiz",
                 "operationId": "0e4662952fcff0a8127e2aad5106b95d",
                 "requestBody": {
                     "required": true,
@@ -40,6 +73,7 @@
                 }
             },
             "delete": {
+                "summary": "Supprimer un quiz",
                 "operationId": "9a41dbaaa82f23c106757189510397c3",
                 "parameters": [
                     {
@@ -61,12 +95,13 @@
                 }
             }
         },
-        "/correct": {
+        "/quiz/correct": {
             "post": {
                 "tags": [
                     "corrections"
                 ],
-                "operationId": "43f32f8abec07d9c061d089f662a678f",
+                "summary": "Lancer la correction des quiz",
+                "operationId": "c58d9200f506e145431f843f51a32431",
                 "parameters": [
                     {
                         "name": "name",
@@ -87,12 +122,13 @@
                 }
             }
         },
-        "/omr_errors_resolved": {
+        "/quiz/omr_errors_resolved": {
             "post": {
                 "tags": [
                     "corrections"
                 ],
-                "operationId": "6a12348c4020caf6ba0e360ec85772f6",
+                "summary": "Résoudre les erreurs de l'omr",
+                "operationId": "eff20a7bf78d8aca7d20877f3745b50b",
                 "parameters": [
                     {
                         "name": "name",
@@ -113,12 +149,13 @@
                 }
             }
         },
-        "/upload_copies": {
+        "/quiz/upload_copies": {
             "post": {
                 "tags": [
                     "corrections"
                 ],
-                "operationId": "5ad399648d6d25f97c6c5c741d0cb7b4",
+                "summary": "Upload les copies",
+                "operationId": "867bbc29c5ec688d5321a9687ca6a543",
                 "parameters": [
                     {
                         "name": "name",
@@ -147,7 +184,7 @@
                 }
             }
         },
-        "/upload_correction": {
+        "/quiz/upload_correction": {
             "post": {
                 "tags": [
                     "corrections"
@@ -193,7 +230,7 @@
                 }
             }
         },
-        "/upload_list": {
+        "/quiz/upload_list": {
             "post": {
                 "tags": [
                     "lists"
@@ -239,9 +276,10 @@
                 }
             }
         },
-        "/check_correction": {
+        "/quiz/check_correction": {
             "get": {
-                "operationId": "ef574a1eafa7550924568e1967179422",
+                "summary": "Vérifier les corrections",
+                "operationId": "542efba46bfda75177142284a612dbc6",
                 "parameters": [
                     {
                         "name": "name",
