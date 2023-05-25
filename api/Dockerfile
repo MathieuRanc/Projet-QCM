@@ -75,6 +75,9 @@ RUN php artisan key:generate --ansi
 
 # Create a directory for logs
 RUN mkdir -p storage/logs
+RUN mkdir -p storage/framework/cache
+RUN mkdir -p storage/framework/sessions
+RUN mkdir -p storage/framework/views
 
 # Set permissions on storage and logs folder
 RUN chmod -R 755 storage
