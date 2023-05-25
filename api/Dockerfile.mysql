@@ -1,0 +1,14 @@
+# Choisir l'image de base
+FROM mysql:8
+
+# Copier le script SQL dans le conteneur
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Configurer les variables d'environnement pour MySQL
+ENV MYSQL_ROOT_PASSWORD=password
+ENV MYSQL_DATABASE=qcm
+ENV MYSQL_USER=laravel
+ENV MYSQL_PASSWORD=password
+
+# Exposer le port 3306 pour MySQL
+EXPOSE 3306

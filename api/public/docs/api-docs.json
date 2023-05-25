@@ -1,0 +1,290 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation",
+        "description": "Cette documentation Swagger fournit une interface pour interagir avec une API de gestion de quiz. L'API offre plusieurs fonctionnalités, comme la création et la suppression de quiz, la correction des réponses des quiz, la résolution des erreurs OMR (Optical Mark Recognition), et le téléchargement de fichiers de correction et de listes d'étudiants. En outre, elle permet également de vérifier les corrections des quiz. L'API utilise principalement les méthodes HTTP POST et DELETE pour effectuer ces opérations. Chaque opération est bien définie avec des réponses attendues en cas de succès ou d'échec. La documentation est détaillée, fournissant des informations sur les types de données attendus, les réponses HTTP possibles et d'autres détails pertinents pour chaque opération.",
+        "version": "0.1"
+    },
+    "paths": {
+        "/quiz": {
+            "get": {
+                "summary": "Récupère la liste des quiz créés",
+                "operationId": "9f1052a872b8a4b6e915263bc4c738bd",
+                "responses": {
+                    "200": {
+                        "description": "Récupération réussie"
+                    },
+                    "404": {
+                        "description": "Aucun quiz n'a été trouvé"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crée un quiz",
+                "operationId": "0e4662952fcff0a8127e2aad5106b95d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "nbQuestion"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Le nom du quiz à créer",
+                                        "type": "string"
+                                    },
+                                    "nbQuestion": {
+                                        "description": "Nombre de question du quizz",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Quiz créé avec succès"
+                    },
+                    "400": {
+                        "description": "Le nom du quiz existe déjà"
+                    },
+                    "500": {
+                        "description": "Erreur lors de la création du quiz"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un quiz",
+                "operationId": "9a41dbaaa82f23c106757189510397c3",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quiz supprimé avec succès"
+                    },
+                    "400": {
+                        "description": "Le nom du quiz n'existe pas"
+                    }
+                }
+            }
+        },
+        "/quiz/correct": {
+            "post": {
+                "tags": [
+                    "corrections"
+                ],
+                "summary": "Lancer la correction des quiz",
+                "operationId": "c58d9200f506e145431f843f51a32431",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quiz corrigé"
+                    },
+                    "304": {
+                        "description": "Erreur lors de la préparation de la correction ou lors de la correction"
+                    }
+                }
+            }
+        },
+        "/quiz/omr_errors_resolved": {
+            "post": {
+                "tags": [
+                    "corrections"
+                ],
+                "summary": "Résoudre les erreurs de l'omr",
+                "operationId": "eff20a7bf78d8aca7d20877f3745b50b",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Execution du script OMR errors réussie sur le quizz"
+                    },
+                    "304": {
+                        "description": "Erreur lors du script OMR errors"
+                    }
+                }
+            }
+        },
+        "/quiz/upload_copies": {
+            "post": {
+                "tags": [
+                    "corrections"
+                ],
+                "summary": "Upload les copies",
+                "operationId": "867bbc29c5ec688d5321a9687ca6a543",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fichier de correction uploadé avec succès"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'upload du fichier de correction"
+                    }
+                }
+            }
+        },
+        "/quiz/upload_correction": {
+            "post": {
+                "tags": [
+                    "corrections"
+                ],
+                "summary": "Upload de la correction du quiz",
+                "operationId": "uploadCorrection",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Nom du quiz",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Fichier de correction à uploader",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "Fichier à uploader",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fichier de correction uploadé avec succès"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'upload du fichier de correction"
+                    }
+                }
+            }
+        },
+        "/quiz/upload_list": {
+            "post": {
+                "tags": [
+                    "lists"
+                ],
+                "summary": "Upload de la liste des élèves du quiz",
+                "operationId": "uploadList",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Nom du quiz",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Fichier de liste à uploader",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "Fichier à uploader",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fichier de liste uploadé avec succès"
+                    },
+                    "500": {
+                        "description": "Erreur lors de l'upload du fichier de liste"
+                    }
+                }
+            }
+        },
+        "/quiz/check_correction": {
+            "get": {
+                "summary": "Vérifier les corrections",
+                "operationId": "542efba46bfda75177142284a612dbc6",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des quiz"
+                    },
+                    "500": {
+                        "description": "Erreur lors de la récupération de la liste des quiz"
+                    }
+                }
+            }
+        }
+    }
+}

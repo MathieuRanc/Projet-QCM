@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+
+  # Application & web server
+  app:
+    build:
+      context: .
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - "database"
+    ports:
+      - 80:80
+  # Database
+  database:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: qcm
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+
+volumes:
+  dbdata:

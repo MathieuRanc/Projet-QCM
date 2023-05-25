@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "app/src/renderer"
+		},
+		{
+			"path": "api"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}
