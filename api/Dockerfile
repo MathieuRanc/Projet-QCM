@@ -80,4 +80,5 @@ RUN mkdir -p storage/logs
 RUN chmod -R 755 storage
 RUN chown -R www-data:www-data storage
 
-RUN php artisan migrate:fresh
+# RUN php artisan migrate:fresh
+CMD ["php", "artisan", "migrate:fresh", "--seed"]
