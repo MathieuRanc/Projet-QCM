@@ -1,15 +1,12 @@
 <template>
   <main>
-    <!-- return link -->
     <div class="navigation">
       <button @click="$router.push('/')">
-        <!-- fontawesome chevron left -->
         <i class="fas fa-chevron-left"></i>
         Retour
       </button>
       <input type="checkbox" name="menu" id="menu" />
       <label for="menu">
-        <!-- fontawesome 3 dots -->
         <i class="fas fa-ellipsis-v"></i>
         <div class="menu">
           <!-- <button @click="renameQuiz">Renommer</button> -->
@@ -32,7 +29,6 @@
       </div>
       <div>
         <span>Date d'examen</span>
-        <!-- display date with format dd/mm/yyyy -->
         <div>{{ new Date(quiz.date).toLocaleDateString() }}</div>
       </div>
     </div>
@@ -46,19 +42,12 @@
           pouvez suivre ce lien pour
           <a :href="API_BASE_URL + '/correction_example.csv'" download>télécharger un fichier exemple</a>.
         </p>
-        <!-- <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone> -->
-        <!-- <dropzone id="foo" :options="options" :destroyDropzone="true" ref="fileInput" @change="addFile"></dropzone> -->
         <form>
           <input type="file" name="file" id="file" ref="fileInputCorrection" @change="uploadCorrection" />
-          <!-- <button class="validate charging" type="submit">
-            <i class="fas fa-upload"></i>
-            Téléverser le corrigé
-            <span :style="`width: ${uploadProgress * 100}%;`"></span>
-          </button> -->
+          <label for="file"> Uploader le corrigé : <span>Parcourir</span></label>
         </form>
         <div class="validation">
           <button v-if="!waiting" class="validate" @click="validateStep" id="firstValidate">
-            <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
           </button>
@@ -73,46 +62,31 @@
       <span>2</span>
       <div>
         <h2>Impression des sujets</h2>
-        <!-- <p>Récupérer une copie vierge pour afin de la photocopier pour l’ensemble des élèves</p>
-        <a class="button" :href="API_BASE_URL + '/modele.pdf'" download="copie_vierge.pdf">
-          <i class="fas fa-file-download"></i>
-          Télécharger une copie vierge
-        </a>
-        <div class="or">OU</div>
-        <p>
-          Récupérer des copies numérotées, sélectionnez un nombre de copies puis téléchargez les copies via le bouton de
-          téléchargement
-        </p>
-        <label for="copies">
-          Nombre d’étudiants
-          <input type="number" name="copies" id="copies" v-model="copies" />
-          <button @click="downloadCopies">
-            <i class="fas fa-file-download"></i>
-          </button>
-        </label>
-        <div class="or">OU</div> -->
         <p>
           Téléverser la liste des élèves afin d’associer automatiquement chaque copie numérotée à un élève,
-          <a :href="API_BASE_URL + '/liste_id.csv'" download>télécharger un fichier exemple</a>
+          <a :href="API_BASE_URL + '/liste_id.csv'" download>télécharger un fichier exemple</a>. Un fichier PDF sera
+          généré et téléchargé automatiquement. N'utilisez pas le bouton de téléchargement ci-dessous sauf si le
+          téléchargement automatique ne démarre pas après 30 secondes.
         </p>
-        <!-- <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone> -->
         <form>
           <input type="file" name="file" id="fileListe" ref="fileInputListe" @change="uploadStudents" />
+          <label for="fileListe">Uploader la liste des élèves : <span>Parcourir</span></label>
         </form>
+        <p>
+          Un fichier PDF sera généré et téléchargé automatiquement. N'utilisez pas le bouton de téléchargement
+          ci-dessous sauf si le téléchargement automatique ne démarre pas après 30 secondes.
+        </p>
         <!-- télécharger les copies des élèves -->
         <a :href="API_BASE_URL + '/' + quizName + '.pdf'" download id="downloadCopies">
-          <!-- fontawesome file download -->
           <i class="fas fa-file-download"></i>
-          Télécharger les copies des élèves
+          Téléchargement manuel
         </a>
         <div class="validation">
           <button class="outline" @click="cancelStep">
-            <!-- fontawesome return -->
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
           <button v-if="!waiting" class="validate" @click="validateStep" id="secondValidate">
-            <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
           </button>
@@ -138,12 +112,10 @@
         ></dropzone>
         <div class="validation">
           <button class="outline" @click="cancelStep">
-            <!-- fontawesome return -->
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
           <button class="validate" @click="validateStep">
-            <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
           </button>
@@ -157,18 +129,15 @@
         <h2>Correction automatique des copies</h2>
         <p>Lancer le traitement de correction des copies</p>
         <button @click="correction">
-          <!-- fontawesome magic -->
           <i class="fas fa-magic"></i>
           Lancer la correction
         </button>
         <div class="validation">
           <button class="outline" @click="cancelStep">
-            <!-- fontawesome return -->
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
           <button v-if="!waiting" class="validate" @click="validateStep" id="fourthValidate">
-            <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
           </button>
@@ -185,18 +154,15 @@
         <h2>Vérification manuelle des résultats</h2>
         <p>Vérifier le bon fonctionnement de la correction automatique</p>
         <button @click="checkCorrection">
-          <!-- fontawesome pen -->
           <i class="fas fa-pen"></i>
           Vérifier
         </button>
         <div class="validation">
           <button class="outline" @click="cancelStep">
-            <!-- fontawesome return -->
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
           <button v-if="!waiting" class="validate" @click="validateStep" id="fiveValidate">
-            <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
           </button>
@@ -213,18 +179,15 @@
         <h2>Résultats de l’épreuve</h2>
         <p>Récupérer les résultats de l’épreuve</p>
         <a :href="API_BASE_URL + '/' + quizName + '.csv'" download>
-          <!-- fontawesome download -->
           <i class="fas fa-download"></i>
           Télécharger
         </a>
         <div class="validation">
           <button class="outline" @click="cancelStep">
-            <!-- fontawesome return -->
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
           <button class="validate" @click="validateStep">
-            <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Terminer le qcm
           </button>
@@ -237,7 +200,6 @@
       <div>
         <div class="validation">
           <button class="outline" @click="cancelStep">
-            <!-- fontawesome return -->
             <i class="fas fa-undo"></i>
             Réouvrir le qcm
           </button>
@@ -328,15 +290,17 @@ export default {
           },
         })
         .then((response) => {
+          this.waiting = false;
           document.getElementById('firstValidate').click();
         })
         .catch((error) => {
+          this.waiting = false;
           console.log(error);
         });
-      this.waiting = false;
     },
     uploadStudents(event) {
       this.waiting = true;
+
       // Create a new FormData object
       var formData = new FormData();
 
@@ -346,6 +310,11 @@ export default {
       // Add the quiz name to the FormData object
       formData.append('name', this.quizName);
 
+      // timeout 1000ms
+      setTimeout(() => {
+        console.log('waiting');
+      }, 1000);
+
       this.$axios
         .post(`${this.API_BASE_URL}/quiz/upload_list`, formData, {
           headers: {
@@ -353,13 +322,14 @@ export default {
           },
         })
         .then((response) => {
+          this.waiting = false;
           document.getElementById('downloadCopies').click();
           document.getElementById('secondValidate').click();
         })
         .catch((error) => {
+          this.waiting = false;
           console.log(error);
         });
-      this.waiting = false;
     },
     correction() {
       this.waiting = true;
@@ -791,5 +761,53 @@ button.loader {
     background-color: var(--green);
     border-radius: 100px;
   }
+}
+
+input[type='file'] {
+  // display: none;
+  + label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    box-shadow: none;
+    padding: 0;
+    color: black;
+    font-size: 16px;
+    cursor: default;
+    span {
+      cursor: pointer;
+      background-color: var(--red);
+      color: white;
+      border-radius: 50px;
+      padding: 12px 20px;
+      transition: background-color 0.1s;
+      &:hover {
+        background-color: var(--dark-red);
+      }
+    }
+    &:hover {
+      background-color: var(--red-hover);
+    }
+  }
+}
+
+#foo {
+  overflow-y: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+</style>
+
+<style lang="scss">
+.dropzone .dz-preview.dz-image-preview {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+.dropzone .dz-preview:hover .dz-details {
+  background-color: var(--red);
+}
+.dropzone .dz-preview:hover {
+  z-index: 10;
 }
 </style>
