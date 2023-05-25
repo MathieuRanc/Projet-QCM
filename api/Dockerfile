@@ -56,8 +56,9 @@ WORKDIR /var/www
 # Copy the application files to the Docker container
 COPY . .
 
-# Copy the application example env to the Docker container
+COPY start.sh /start.sh
 
+# Copy the application example env to the Docker container
 COPY .env.example .env
 
 # Install the PHP dependencies
