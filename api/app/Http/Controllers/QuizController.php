@@ -49,8 +49,9 @@ class QuizController extends Controller
      *     @OA\RequestBody(
      *       required=true,
      *       @OA\JsonContent(
-     *         required={"name"},
+     *         required={"name","nbQuestion"},
      *         @OA\Property(property="name", type="string", description="Le nom du quiz à créer"),
+     *         @OA\Property(property="nbQuestion", type="int", description="Nombre de question du quizz"),
      *       ),
      *     )
      * )
@@ -133,8 +134,8 @@ class QuizController extends Controller
         $quiz_name = $request->input('name');
 
         $result = shell_exec("bash ../bin/omr.sh " . escapeshellarg($quiz_name));
-        $result = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
         $result = shell_exec("bash ../bin/prepare_correction.sh " . escapeshellarg($quiz_name));
+        $result = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
 
         if (str_starts_with($result, "All done")) {
             // Retrieve the students_answers file
