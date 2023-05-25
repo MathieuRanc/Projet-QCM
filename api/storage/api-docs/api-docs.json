@@ -9,7 +9,7 @@
         "/quiz": {
             "get": {
                 "summary": "Récupère la liste des quiz créés",
-                "operationId": "1ad7706c73a07032c72ff1f7207d41f0",
+                "operationId": "9f1052a872b8a4b6e915263bc4c738bd",
                 "responses": {
                     "200": {
                         "description": "Récupération réussie"
@@ -28,12 +28,17 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "name"
+                                    "name",
+                                    "nbQuestion"
                                 ],
                                 "properties": {
                                     "name": {
                                         "description": "Le nom du quiz à créer",
                                         "type": "string"
+                                    },
+                                    "nbQuestion": {
+                                        "description": "Nombre de question du quizz",
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
