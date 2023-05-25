@@ -81,7 +81,3 @@ RUN mkdir -p storage/logs
 # Set permissions on storage and logs folder
 RUN chmod -R 755 storage
 RUN chown -R www-data:www-data storage
-
-RUN chmod +x ./start.sh
-
-CMD ["./start.sh"]
