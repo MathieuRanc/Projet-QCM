@@ -56,8 +56,9 @@ WORKDIR /var/www
 # Copy the application files to the Docker container
 COPY . .
 
-# generate the documentation
-# RUN php artisan config:cache && php artisan l5-swagger:generate
+# Copy the application example env to the Docker container
+
+COPY .env.example .env
 
 # Install the PHP dependencies
 RUN composer install
@@ -69,3 +70,17 @@ RUN sed -i 's/\r//g' bin/*.sh
 
 RUN sed -i '1a composer install --working-dir=/var/www&' /usr/local/bin/docker-php-entrypoint
 RUN sed -i '1a sed -i "s/\r$//" bin/*.sh' /usr/local/bin/docker-php-entrypoint
+
+# Generate Application Key
+RUN php artisan key:generate --ansi
+
+# Create a directory for logs
+RUN mkdir -p storage/logs
+
+# Set permissions on storage and logs folder
+RUN chmod -R 755 storage
+RUN chown -R www-data:www-data storage
+
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
