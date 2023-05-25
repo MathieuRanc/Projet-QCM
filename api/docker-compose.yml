@@ -12,6 +12,7 @@ services:
       - "database"
     ports:
       - 80:80
+    command: bash -c "php artisan migrate:fresh"
   # Database
   database:
     build:
