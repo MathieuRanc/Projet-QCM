@@ -136,7 +136,7 @@ class QuizController extends Controller
         $result = shell_exec("bash ../bin/prepare_correction.sh " . escapeshellarg($quiz_name));
         $resultCreateSFile = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
         echo "i was here";
-        if (strpos($result, 'All done') !== false)) {
+        if (strpos($result, 'All done') !== false) {
             echo "i was here too";
             // Retrieve the students_answers file
             $students_answers_file = "../quiz_data/" . $quiz_name . "/" . "qcm.students_answers";
@@ -148,7 +148,7 @@ class QuizController extends Controller
 
                 try {
                     // Update the 'list' table with the students_answers JSON
-                    DB::table('list')->where('name', $quiz_name)->update(['students_answers' => $students_answers_json]);
+                    Quiz::where('name', $quiz_name)->update(['students_answers' => $students_answers_json]);
 
                     // Return success response
                 } catch (\Exception $e) {
