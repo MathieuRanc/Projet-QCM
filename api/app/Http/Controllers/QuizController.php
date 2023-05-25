@@ -57,10 +57,8 @@ class QuizController extends Controller
     public function create(Request $request)
     {
         $quiz_name = $request->input('name');
-<<<<<<< Updated upstream
         $nb_question = $request->input('nbQuestion');
-=======
->>>>>>> Stashed changes
+        
         $existingQuiz = Quiz::where('name', $quiz_name)->first();
 
         if ($existingQuiz) {
