@@ -326,24 +326,24 @@ class QuizController extends Controller
             $fileContentLines = explode(PHP_EOL, $fileContent);
 
             // parse csv separator is ; and the first line is the header
-            $csv = array_map('str_getcsv', $fileContentLines, array_fill(0, count($fileContentLines), ';'));
+            // $csv = array_map('str_getcsv', $fileContentLines, array_fill(0, count($fileContentLines), ';'));
 
-            // first element of array is the header, use it as keys for each element of the array
-            $json = json_encode(array_map(function ($x) use ($csv) {
-                return array_combine($csv[0], $x);
-            }, array_slice($csv, 1)));
+            // // first element of array is the header, use it as keys for each element of the array
+            // $json = json_encode(array_map(function ($x) use ($csv) {
+            //     return array_combine($csv[0], $x);
+            // }, array_slice($csv, 1)));
 
-            // convert the element with key 'reponses_attendues' to an array of string, the separation is \\ , also remove all the letter R
-            $json = str_replace('R', '', $json);
-            // for each element of the array, split the string with \\ and remove the first element of the array
-            $json = preg_replace('/\\\/', '', $json, 1);
+            // // convert the element with key 'reponses_attendues' to an array of string, the separation is \\ , also remove all the letter R
+            // $json = str_replace('R', '', $json);
+            // // for each element of the array, split the string with \\ and remove the first element of the array
+            // $json = preg_replace('/\\\/', '', $json, 1);
 
-            // Update the existing Quiz record
-            $quiz = Quiz::where('name', $quiz_name)->first();
-            // log json
-            error_log($json);
-            $quiz->correction = $json;
-            $quiz->save();
+            // // Update the existing Quiz record
+            // $quiz = Quiz::where('name', $quiz_name)->first();
+            // // log json
+            // error_log($json);
+            // $quiz->correction = $json;
+            // $quiz->save();
 
             // Remove the first line
             array_shift($fileContentLines);
