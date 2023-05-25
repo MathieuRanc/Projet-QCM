@@ -135,9 +135,7 @@ class QuizController extends Controller
         $result = shell_exec("bash ../bin/omr.sh " . escapeshellarg($quiz_name));
         $result = shell_exec("bash ../bin/prepare_correction.sh " . escapeshellarg($quiz_name));
         $resultCreateSFile = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
-        echo "i was here";
         if (strpos($result, 'All done') !== false) {
-            echo "i was here too";
             // Retrieve the students_answers file
             $students_answers_file = "../quiz_data/" . $quiz_name . "/" . "qcm.students_answers";
 
@@ -165,7 +163,9 @@ class QuizController extends Controller
             $result = shell_exec("bash ../bin/correct_quiz.sh " . escapeshellarg($quiz_name));
 
             // copy the corrected files to the public folder using Storage
-            $result = Storage::copy("../quiz_data/" . $quiz_name . "/" . "qcm.correction_marks.csv", "../public/" . $quiz_name . ".csv");
+            $quiz_name = $request->input('name');
+            $path = 'quiz_data/' . $quiz_name . '/correction/qcm.correction_marks.csv';
+            $result = Storage::disk('quiz_data')->copy($path, 'public/' . $quiz_name . '.csv');
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Erreur lors de la correction ' . $quiz_name,
@@ -173,8 +173,12 @@ class QuizController extends Controller
             ], 304);
         }
 
-        if (str_starts_with($result, "All done")) {
-            return response()->json(['message' => 'Le quiz ' . $quiz_name . ' a été corrigé '], 200);
+        if (strpos($result, 'All done') !== false) {
+            // path with current host
+            return response()->json([
+                'message' => 'Le quiz ' . $quiz_name . ' a été corrigé ',
+                'path' => '/' . $quiz_name . '.csv'
+            ], 200);
         } else {
             return response()->json(['message' => 'Erreur lors de la correction ' . $quiz_name], 304);
         }
