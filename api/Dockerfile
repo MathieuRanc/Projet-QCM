@@ -56,6 +56,9 @@ WORKDIR /var/www
 # Copy the application files to the Docker container
 COPY . .
 
+# generate the documentation
+RUN php artisan l5-swagger:generate
+
 # Install the PHP dependencies
 RUN composer install
 

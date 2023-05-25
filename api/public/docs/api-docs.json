@@ -27,7 +27,10 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": ["name", "nbQuestion"],
+                                "required": [
+                                    "name",
+                                    "nbQuestion"
+                                ],
                                 "properties": {
                                     "name": {
                                         "description": "Le nom du quiz à créer",
@@ -80,7 +83,9 @@
         },
         "/quiz/correct": {
             "post": {
-                "tags": ["corrections"],
+                "tags": [
+                    "corrections"
+                ],
                 "summary": "Lancer la correction des quiz",
                 "operationId": "c58d9200f506e145431f843f51a32431",
                 "parameters": [
@@ -105,7 +110,9 @@
         },
         "/quiz/omr_errors_resolved": {
             "post": {
-                "tags": ["corrections"],
+                "tags": [
+                    "corrections"
+                ],
                 "summary": "Résoudre les erreurs de l'omr",
                 "operationId": "eff20a7bf78d8aca7d20877f3745b50b",
                 "parameters": [
@@ -130,7 +137,9 @@
         },
         "/quiz/upload_copies": {
             "post": {
-                "tags": ["corrections"],
+                "tags": [
+                    "corrections"
+                ],
                 "summary": "Upload les copies",
                 "operationId": "867bbc29c5ec688d5321a9687ca6a543",
                 "parameters": [
@@ -163,7 +172,9 @@
         },
         "/quiz/upload_correction": {
             "post": {
-                "tags": ["corrections"],
+                "tags": [
+                    "corrections"
+                ],
                 "summary": "Upload de la correction du quiz",
                 "operationId": "uploadCorrection",
                 "parameters": [
@@ -207,7 +218,9 @@
         },
         "/quiz/upload_list": {
             "post": {
-                "tags": ["lists"],
+                "tags": [
+                    "lists"
+                ],
                 "summary": "Upload de la liste des élèves du quiz",
                 "operationId": "uploadList",
                 "parameters": [
