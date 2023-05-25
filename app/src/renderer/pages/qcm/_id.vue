@@ -50,12 +50,11 @@
         <!-- <dropzone id="foo" :options="options" :destroyDropzone="true" ref="fileInput" @change="addFile"></dropzone> -->
         <form>
           <input type="file" name="file" id="file" ref="fileInputCorrection" @change="uploadCorrection" />
-          <button class="validate charging" type="submit">
-            <!-- fontawesome upload -->
+          <!-- <button class="validate charging" type="submit">
             <i class="fas fa-upload"></i>
             Téléverser le corrigé
             <span :style="`width: ${uploadProgress * 100}%;`"></span>
-          </button>
+          </button> -->
         </form>
         <div class="validation">
           <button class="validate" @click="validateStep" id="firstValidate">
