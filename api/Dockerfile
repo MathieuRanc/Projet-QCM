@@ -56,7 +56,7 @@ WORKDIR /var/www
 # Copy the application files to the Docker container
 COPY . .
 
-COPY start.sh /start.sh
+COPY ./start.sh ./start.sh
 
 # Copy the application example env to the Docker container
 COPY .env.example .env
@@ -82,6 +82,6 @@ RUN mkdir -p storage/logs
 RUN chmod -R 755 storage
 RUN chown -R www-data:www-data storage
 
-RUN chmod +x /start.sh
+RUN chmod +x ./start.sh
 
-CMD ["/start.sh"]
+CMD ["./start.sh"]
