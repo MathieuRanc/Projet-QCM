@@ -32,7 +32,7 @@
           <input type="date" name="date" id="date" :value="new Date().toISOString().substring(0, 10)"
         /></label>
         <label for="nbQuestion">
-          <span>Date d'examen</span>
+          <span>Nombre de questions</span>
           <input type="number" name="nbQuestion" id="nbQuestion" value="20"
         /></label>
       </div>

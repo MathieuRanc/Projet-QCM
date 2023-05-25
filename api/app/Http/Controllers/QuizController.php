@@ -26,14 +26,14 @@ class QuizController extends Controller
      *     @OA\Response(response="404", description="Aucun quiz n'a été trouvé"),
      * )
      */
-    public function list()
+    public function getQuiz()
     {
-        $quizzes = Quiz::all();
+        $qcm = Quiz::all();
 
-        if ($quizzes->isEmpty()) {
-            return response()->json(['message' => 'Aucun quiz n\'a été trouvé'], 404);
+        if ($qcm->isEmpty()) {
+            return response()->json(['message' => 'Aucun qcm n\'a été trouvé'], 404);
         } else {
-            return response()->json(['quizzes' => $quizzes], 200);
+            return response()->json(['qcm' => $qcm], 200);
         }
     }
 
@@ -60,7 +60,7 @@ class QuizController extends Controller
     {
         $quiz_name = $request->input('name');
         $nb_question = $request->input('nbQuestion');
-        $existingQuiz = Quiz::where('qcmName', $quiz_name)->first();
+        $existingQuiz = Quiz::where('name', $quiz_name)->first();
 
         if ($existingQuiz) {
             return response()->json(['message' => 'Le nom du quiz existe déjà'], 400);
@@ -73,7 +73,7 @@ class QuizController extends Controller
 
             if (str_starts_with($scriptOutput, "Quiz")) {
                 // Create the quiz if the script execution was successful
-                Quiz::create(['qcmName' => $quiz_name]);
+                Quiz::create(['name' => $quiz_name]);
 
                 return response()->json(['message' => 'Le quiz ' . $quiz_name . ' a été créé avec succès'], 200);
             } else {
@@ -99,7 +99,7 @@ class QuizController extends Controller
     public function delete(Request $request)
     {
         $quiz_name = $request->input('name');
-        $existingQuiz = Quiz::where('qcmName', $quiz_name)->first();
+        $existingQuiz = Quiz::where('name', $quiz_name)->first();
 
         if ($existingQuiz) {
             // Ajouter la suppression du quiz ici
@@ -149,7 +149,7 @@ class QuizController extends Controller
 
                 try {
                     // Update the 'list' table with the students_answers JSON
-                    DB::table('list')->where('qcmName', $quiz_name)->update(['students_answers' => $students_answers_json]);
+                    DB::table('list')->where('name', $quiz_name)->update(['students_answers' => $students_answers_json]);
 
                     // Return success response
                 } catch (\Exception $e) {
