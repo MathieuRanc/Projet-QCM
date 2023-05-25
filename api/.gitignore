@@ -19,3 +19,6 @@ yarn-error.log
 /.vscode
 /quiz_data/
 .DS_Store
+/framework/cache/*
+/framework/sessions/*
+/framework/views/*
