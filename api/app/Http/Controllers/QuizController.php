@@ -58,14 +58,14 @@ class QuizController extends Controller
     {
         $quiz_name = $request->input('name');
         $nb_question = $request->input('nbQuestion');
-        
+
         $existingQuiz = Quiz::where('name', $quiz_name)->first();
 
         if ($existingQuiz) {
             return response()->json(['message' => 'Le nom du quiz existe déjà'], 400);
         } else {
             // Execute the bash script here
-            $scriptOutput = exec("bash ../bin/create_quiz.sh " . escapeshellarg($quiz_name) . " " .escapeshellarg($nb_question));
+            $scriptOutput = exec("bash ../bin/create_quiz.sh " . escapeshellarg($quiz_name) . " " . escapeshellarg($nb_question));
 
             // display the output of the script
             error_log($scriptOutput);
@@ -239,8 +239,8 @@ class QuizController extends Controller
         // Define the path where the file will be stored
         $path = 'quiz_data/' . $quiz_name . '/omr_input';
 
-        // filename is number of copies in the folder + 1
-        $filename = count(Storage::disk('quiz_data')->files($path)) + 1;
+        // filename is UUID
+        $filename = md5(uniqid());
 
         // Store the file in the defined path with name qcm.marking but not the first line of the file
         $result = Storage::disk('quiz_data')->putFileAs($path, $file, $filename . '.jpg');
