@@ -135,11 +135,12 @@ class QuizController extends Controller
 
         $result = shell_exec("bash ../bin/omr.sh " . escapeshellarg($quiz_name));
         $result = shell_exec("bash ../bin/prepare_correction.sh " . escapeshellarg($quiz_name));
-        $result = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
-
+        $resultCreateSFile = shell_exec("bash ../bin/create_students_file_from_scans_infos.sh " . escapeshellarg($quiz_name));
+        echo "i was here";
         if (str_starts_with($result, "All done")) {
+            echo "i was here too";
             // Retrieve the students_answers file
-            $students_answers_file = "../quiz_data/" . $quiz_name . "/" . $quiz_name . ".students_answers";
+            $students_answers_file = "../quiz_data/" . $quiz_name . "/" . "qcm.students_answers";
 
             if (file_exists($students_answers_file)) {
                 // Read the file content and convert it to JSON
