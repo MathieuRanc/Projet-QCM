@@ -161,7 +161,17 @@ class QuizController extends Controller
             return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name], 304);
         }
 
-        $result = shell_exec("bash ../bin/correct_quiz.sh " . escapeshellarg($quiz_name));
+        try {
+            $result = shell_exec("bash ../bin/correct_quiz.sh " . escapeshellarg($quiz_name));
+
+            // copy the corrected files to the public folder using Storage
+            $result = Storage::copy("../quiz_data/" . $quiz_name . "/" . "qcm.correction_marks.csv", "../public/" . $quiz_name . ".csv");
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors de la correction ' . $quiz_name,
+                'error' => $e->getMessage()
+            ], 304);
+        }
 
         if (str_starts_with($result, "All done")) {
             return response()->json(['message' => 'Le quiz ' . $quiz_name . ' a été corrigé '], 200);
