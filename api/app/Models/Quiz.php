@@ -10,5 +10,5 @@ class Quiz extends Model
     use HasFactory;
     protected $table = 'list';
 
-    protected $fillable = ['qcmName'];
+    protected $fillable = ['name', 'students_answers', 'correction', 'updated_at', 'created_at'];
 }
