@@ -26,14 +26,14 @@ class QuizController extends Controller
      *     @OA\Response(response="404", description="Aucun quiz n'a été trouvé"),
      * )
      */
-    public function list()
+    public function getQuiz()
     {
-        $quizzes = Quiz::all();
+        $qcm = Quiz::all();
 
-        if ($quizzes->isEmpty()) {
-            return response()->json(['message' => 'Aucun quiz n\'a été trouvé'], 404);
+        if ($qcm->isEmpty()) {
+            return response()->json(['message' => 'Aucun qcm n\'a été trouvé'], 404);
         } else {
-            return response()->json(['quizzes' => $quizzes], 200);
+            return response()->json(['qcm' => $qcm], 200);
         }
     }
 
