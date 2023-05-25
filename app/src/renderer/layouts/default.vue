@@ -1,7 +1,9 @@
 <template>
   <div id="App">
     <Navbar />
-    <nuxt />
+    <Transition name="fade">
+      <nuxt />
+    </Transition>
     <Footer />
   </div>
 </template>
@@ -19,6 +21,17 @@ export default {
 </script>
 
 <style lang="scss">
+// transition
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s, filter 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  filter: blur(5px);
+}
+
 @font-face {
   font-family: 'Fredoka';
   src: url('~/assets/fonts/fredoka.woff2') format('woff2'), url('~/assets/fonts/fredoka.woff') format('woff');
@@ -82,5 +95,16 @@ main {
   border-radius: 50px;
   cursor: pointer;
   font-weight: 700;
+  &:disabled {
+    background-color: #db7171;
+    cursor: not-allowed;
+  }
+}
+
+.loader {
+  height: 50px;
+  width: 50px;
+  margin: 0 auto;
+  opacity: 0;
 }
 </style>

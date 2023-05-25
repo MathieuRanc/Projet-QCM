@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\Storage;
 class QuizController extends Controller
 {
     /**
-     * @OA\Info(title="API Documentation", version="0.1", description="Cette documentation Swagger fournit une interface pour interagir avec une API de gestion de quiz. L'API offre plusieurs fonctionnalités, comme la création et la suppression de quiz, la correction des réponses des quiz, la résolution des erreurs OMR (Optical Mark Recognition), et le téléchargement de fichiers de correction et de listes d'étudiants. En outre, elle permet également de vérifier les corrections des quiz. L'API utilise principalement les méthodes HTTP POST et DELETE pour effectuer ces opérations. Chaque opération est bien définie avec des réponses attendues en cas de succès ou d'échec. La documentation est détaillée, fournissant des informations sur les types de données attendus, les réponses HTTP possibles et d'autres détails pertinents pour chaque opération.")
-     */
-    public function index()
-    {
-        return response()->json(['message' => 'Hello worlds lol mathieu en roue libre']);
-    }
-
-    /**
      * @OA\Get(
      *     path="/quiz",
      *     summary="Récupère la liste des quiz créés",

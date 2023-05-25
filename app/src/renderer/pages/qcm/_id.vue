@@ -12,7 +12,7 @@
         <!-- fontawesome 3 dots -->
         <i class="fas fa-ellipsis-v"></i>
         <div class="menu">
-          <button @click="renameQuiz">Renommer</button>
+          <!-- <button @click="renameQuiz">Renommer</button> -->
           <button @click="deleteQuiz">Supprimer</button>
         </div>
       </label>
@@ -57,10 +57,13 @@
           </button> -->
         </form>
         <div class="validation">
-          <button class="validate" @click="validateStep" id="firstValidate">
+          <button v-if="!waiting" class="validate" @click="validateStep" id="firstValidate">
             <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
+          </button>
+          <button v-else class="loader" @click="validateStep" id="firstValidate">
+            <img src="~/assets/images/loader_white.svg" alt="loader" />
           </button>
         </div>
       </div>
@@ -108,10 +111,13 @@
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
-          <button class="validate" @click="validateStep" id="secondValidate">
+          <button v-if="!waiting" class="validate" @click="validateStep" id="secondValidate">
             <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
+          </button>
+          <button v-else class="loader" @click="validateStep" id="secondValidate">
+            <img src="~/assets/images/loader_white.svg" alt="loader" />
           </button>
         </div>
       </div>
@@ -161,10 +167,13 @@
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
-          <button class="validate" @click="validateStep" id="fourthValidate">
+          <button v-if="!waiting" class="validate" @click="validateStep" id="fourthValidate">
             <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
+          </button>
+          <button v-else class="loader" @click="validateStep" id="fourthValidate">
+            <img src="~/assets/images/loader_white.svg" alt="loader" />
           </button>
         </div>
       </div>
@@ -186,10 +195,13 @@
             <i class="fas fa-undo"></i>
             Retour à l'étape précédente
           </button>
-          <button class="validate" @click="validateStep" id="fiveValidate">
+          <button v-if="!waiting" class="validate" @click="validateStep" id="fiveValidate">
             <!-- fontawesome check -->
             <i class="fas fa-check"></i>
             Valider
+          </button>
+          <button v-else class="loader" @click="validateStep" id="fiveValidate">
+            <img src="~/assets/images/loader_white.svg" alt="loader" />
           </button>
         </div>
       </div>
@@ -250,6 +262,7 @@ export default {
       myFiles: ['tutoriel.jpg'],
       options: {},
       API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost',
+      waiting: false,
     };
   },
   components: {
@@ -296,6 +309,7 @@ export default {
         });
     },
     uploadCorrection(event) {
+      this.waiting = true;
       event.preventDefault();
 
       // Create a new FormData object
@@ -319,8 +333,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      this.waiting = false;
     },
     uploadStudents(event) {
+      this.waiting = true;
       // Create a new FormData object
       var formData = new FormData();
 
@@ -338,12 +354,15 @@ export default {
         })
         .then((response) => {
           document.getElementById('downloadCopies').click();
+          document.getElementById('secondValidate').click();
         })
         .catch((error) => {
           console.log(error);
         });
+      this.waiting = false;
     },
     correction() {
+      this.waiting = true;
       // form data
       var formData = new FormData();
       formData.append('name', this.quizName);
@@ -355,8 +374,10 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      this.waiting = false;
     },
     checkCorrection() {
+      this.waiting = true;
       // form data
       var formData = new FormData();
       formData.append('name', this.quizName);
@@ -368,6 +389,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      this.waiting = false;
     },
     downloadResults() {},
     handleFilePondInit() {},
@@ -754,6 +776,20 @@ section.done {
     transition: all 0.3s;
     top: 0;
     left: 0;
+  }
+}
+
+button.loader {
+  padding: 0;
+  background-color: var(--green);
+  cursor: not-allowed;
+  img {
+    height: 50px;
+    width: 50px;
+  }
+  :hover {
+    background-color: var(--green);
+    border-radius: 100px;
   }
 }
 </style>

@@ -4,9 +4,9 @@
       <h2>Apprendre à générer un QCM</h2>
       <h3>Parcourez la documentation pour apprendre à utiliser l’application</h3>
     </NuxtLink>
-    <label class="searchbar" for="search">
+    <!-- <label class="searchbar" for="search">
       <input type="text" id="search" v-model="search" placeholder="Chercher un quiz" />
-    </label>
+    </label> -->
 
     <div class="container">
       <div class="grid">

@@ -16,7 +16,9 @@
           <a href="#/doc/basic-usage">Basic Usage</a>
         </details>
       </div>
-      <nuxt class="page" />
+      <Transition name="fade">
+        <nuxt />
+      </Transition>
     </main>
     <Footer />
   </div>
@@ -35,6 +37,16 @@ export default {
 </script>
 
 <style lang="scss">
+// transition
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .content {
   margin-top: 20px;
   width: 100%;

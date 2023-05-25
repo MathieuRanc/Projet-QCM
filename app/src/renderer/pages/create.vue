@@ -37,6 +37,7 @@
         /></label>
       </div>
       <input class="button" type="submit" value="Créer le QCM" />
+      <img src="~/assets/images/loader.svg" alt="loader" class="loader" />
     </form>
   </main>
 </template>
@@ -52,7 +53,15 @@ export default {
     };
   },
   methods: {
-    async submit(event)  {
+    async submit(event) {
+      event.preventDefault();
+
+      // disable all inputs
+      document.querySelectorAll('input').forEach((input) => {
+        input.disabled = true;
+      });
+      document.getElementsByClassName('loader')[0].style.opacity = 1;
+
       const quiz = {
         promo: event.target.promo.value,
         subject: event.target.subject.value,
@@ -125,6 +134,9 @@ form {
         border: none;
         background: none;
         outline: none;
+        &:disabled {
+          color: var(--gray);
+        }
       }
       border: 2px solid transparent;
       &:focus-within {

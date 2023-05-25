@@ -60,7 +60,7 @@ export default {
     margin-top: 15px;
     img {
       width: 100%;
-      transform: translateY(-100%);
+      transform: translateY(calc(-100% + 1px));
       position: absolute;
     }
   }
