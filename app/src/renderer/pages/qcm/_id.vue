@@ -48,8 +48,8 @@
         </p>
         <!-- <dropzone id="foo" ref="el" :options="options" :destroyDropzone="true"></dropzone> -->
         <!-- <dropzone id="foo" :options="options" :destroyDropzone="true" ref="fileInput" @change="addFile"></dropzone> -->
-        <form action="" @submit.prevent="uploadCorrection">
-          <input type="file" name="file" id="file" ref="fileInputCorrection" />
+        <form>
+          <input type="file" name="file" id="file" ref="fileInputCorrection" @change="uploadCorrection" />
           <button class="validate charging" type="submit">
             <!-- fontawesome upload -->
             <i class="fas fa-upload"></i>
