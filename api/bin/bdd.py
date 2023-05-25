@@ -1,8 +1,16 @@
 import numpy as np
 import sys
+from pathlib import Path
+import os
+
+# Get the script directory
+script_dir = Path(__file__).parent
+
+# Change the current working directory
+os.chdir(script_dir)
 
 # Ouvre le fichier CSV contenant les données des étudiants
-f = open("liste_id.csv")
+f = open("liste_id.csv", "r")
 
 # Charge les données du fichier CSV en utilisant NumPy et ignore la première ligne (en-têtes)
 data = np.loadtxt(f, dtype=str, delimiter=";", skiprows=1)
