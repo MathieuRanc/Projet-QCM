@@ -57,7 +57,7 @@ WORKDIR /var/www
 COPY . .
 
 # generate the documentation
-RUN php artisan l5-swagger:generate
+RUN php artisan config:cache && php artisan l5-swagger:generate
 
 # Install the PHP dependencies
 RUN composer install
