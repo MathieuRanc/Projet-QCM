@@ -764,7 +764,7 @@ button.loader {
 }
 
 input[type='file'] {
-  // display: none;
+  display: none;
   + label {
     display: flex;
     flex-direction: row;
