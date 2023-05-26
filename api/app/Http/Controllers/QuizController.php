@@ -142,13 +142,13 @@ class QuizController extends Controller
 
                     // Return success response
                 } catch (\Exception $e) {
-                    return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name . '. Erreur de la base de données: ' . $e->getMessage()], 304);
+                    //return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name . '. Erreur de la base de données: ' . $e->getMessage()], 304);
                 }
             } else {
-                return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name . '. Fichier students_answers non trouvé.'], 304);
+                //return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name . '. Fichier students_answers non trouvé.'], 304);
             }
         } else {
-            return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name], 304);
+            //return response()->json(['message' => 'Erreur lors de la préparation de la correction ' . $quiz_name], 304);
         }
 
         try {
