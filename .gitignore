@@ -1,3 +1,5 @@
 .DS_Store
-.DS_Store
 api/storage/logs/laravel.log
+api/storage/framework/views/*
+api/storage/framework/cache/*
+api/storage/framework/sessions/*
