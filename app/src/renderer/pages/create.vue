@@ -49,8 +49,12 @@ export default {
   data() {
     return {
       elements: [],
-      API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost',
     };
+  },
+  computed: {
+    API_BASE_URL(){
+      return process.env.API_BASE_URL || 'http://localhost'
+    }
   },
   methods: {
     async submit(event) {

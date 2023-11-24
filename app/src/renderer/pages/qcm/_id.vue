@@ -106,7 +106,7 @@
           id="foo"
           ref="el"
           :options="{
-            url: 'http://localhost/quiz/upload_copies?name=' + this.quizName,
+            url: API_BASE_URL + '/quiz/upload_copies?name=' + this.quizName,
           }"
           :destroyDropzone="true"
         ></dropzone>
@@ -223,7 +223,6 @@ export default {
       copies: 0,
       myFiles: ['tutoriel.jpg'],
       options: {},
-      API_BASE_URL: this.$config.apiBaseUrl || 'http://localhost',
       waiting: false,
     };
   },
@@ -231,6 +230,9 @@ export default {
     Dropzone,
   },
   computed: {
+    API_BASE_URL() {
+      return process.env.API_BASE_URL || 'http://localhost';
+    },
     quiz() {
       // find quiz by id
       var quiz;
